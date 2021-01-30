@@ -1,15 +1,17 @@
 import { Grid } from "@material-ui/core";
 import CenteredFrame from "../globals/CenterdFrame";
-import ChatFiendsList from "./ChatFiendsList";
+import ChatFriendsList from "./ChatFriendsList";
 
 
 const ChatHome = () => (
     <CenteredFrame>
-        <Grid item xs={3}>
-            <ChatFiendsList />
-        </Grid>
-        <Grid item xs>
+        <Grid container>
+            <Grid item xs={3}>
+                <ChatFriendsList />
+            </Grid>
+            <Grid item xs>
 
+            </Grid>
         </Grid>
     </CenteredFrame>
 );

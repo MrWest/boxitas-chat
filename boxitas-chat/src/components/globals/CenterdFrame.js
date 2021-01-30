@@ -8,7 +8,6 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  border: 1px solid red;
   width: 1200px;
   ${respondTo.lg`
     width: 100%;

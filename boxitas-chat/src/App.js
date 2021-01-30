@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import CenteredFrame from './components/globals/CenterdFrame';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <CenteredFrame>
+        <p style={{ fontSize: 46, color: '#000', marginTop: 78, marginBottom: 90 }}>Orishas</p>
+      </CenteredFrame>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import styled from "styled-components";
 const ChatListTitle = styled.p`
     font-size: 18px;
     margin: 0px;
-    margin-right: 32px;
 `;
 const ChatSearchInput = styled.input`
     height: 32px;
@@ -15,16 +14,11 @@ const ChatSearchInput = styled.input`
     padding-bottom: 2px;
     border: 1px solid #d4d9e2;
     outline: none;
+    position: relative;
 `;
-// const FriendAvatar = styled.div`
-//     height: 42px;
-//     width: 42px';
-//     border-radius: 21px;
-//     background: #3e3e3e;
-//     display: flex;
-//     align-content: center;
-//     justify-content: center;
-// `;
+const SearchInputContainer = styled.div`
+    display: flex;
+`;
 const FriendItemShell = styled(ChatListTitle)`
     border-bottom: 1px solid #d4d9e2;
     background: #fafafa;
@@ -59,15 +53,16 @@ const FriendItem =({ user }) => {
 }
 
 const ChatFriendsList = () => (
-    <div>
-        <Grid container direction="column" >
+        <Grid container direction="column" style={{ minHeight: '50vh' }}>
                 <Grid item>
-                    <Grid container alignItems="center" >
+                    <Grid container alignItems="center" spacing={2}>
                         <Grid item>
                             <ChatListTitle>Friend List</ChatListTitle>
                         </Grid>
                         <Grid item xs>
-                            <ChatSearchInput />
+                            <SearchInputContainer>
+                                <ChatSearchInput />
+                            </SearchInputContainer>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -78,7 +73,6 @@ const ChatFriendsList = () => (
                 </Grid>
                 <Grid item></Grid>
          </Grid>
-    </div>
 
 );
 

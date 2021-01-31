@@ -36,7 +36,7 @@ const ContactName = styled(ChatListTitle)`
     margin-left: 24px;
 `;
 
-const ContactItem =({ user }) => {
+const ContactItem =({ contact }) => {
 
     return (
         <ContactItemShell>
@@ -45,14 +45,16 @@ const ContactItem =({ user }) => {
                     <Person />
                 </Grid>
                 <Grid xs>
-                    <ContactName>{user.name}</ContactName>
+                    <ContactName>{contact.name}</ContactName>
                 </Grid>
             </Grid>
         </ContactItemShell>
     );
 }
 
-const ChatContactList = () => (
+const ChatContactList = () => {
+    const [{ contactsReducer }, dispatch] = useReducer(reducer, []);
+return (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
                 <Grid item>
                     <Grid container alignItems="center" spacing={2}>
@@ -67,13 +69,14 @@ const ChatContactList = () => (
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    <ContactItem user={{ name: 'Karen' }} />
-                    <ContactItem user={{ name: 'Stacy' }} />
-                    <ContactItem user={{ name: 'Bob' }} />
+                    {contactsReducer.map(contact => (
+                        <ContactItem contact={contact} />
+                    ))}
                 </Grid>
                 <Grid item></Grid>
          </Grid>
 
 );
+}
 
 export default ChatContactList;

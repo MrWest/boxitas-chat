@@ -2,7 +2,8 @@ import { Button, Grid } from "@material-ui/core";
 import Person from '@material-ui/icons/PersonRounded';
 import axios from "axios";
 import Pusher from 'pusher-js';
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
+import reducer from '../../reducers';
 import styled from "styled-components";
 
 const ChatListTitle = styled.p`
@@ -57,6 +58,8 @@ const ChatMessages =({ message }) => {
 const ChatBox = () => {
     const [messages, setMessages] = useState([]);
     const [outgoingText, setOutgoingText] = useState();
+    const [{ selectedContactReducer }, dispatch] = useReducer(reducer, {});
+    
     useEffect(() => {
         Pusher.logToConsole = true;
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
@@ -83,7 +86,7 @@ const ChatBox = () => {
     return (
         <Grid container direction="column" style={{ width: '100%', minHeight: '50vh' }}>
                 <Grid item>
-                 <ChatListTitle>Message History</ChatListTitle>
+                 <ChatListTitle>Message History from {selectedContactReducer.name}</ChatListTitle>
                 </Grid>
                 <Grid item xs>
                     {messages.map(message => (

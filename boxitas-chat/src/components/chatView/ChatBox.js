@@ -1,5 +1,8 @@
 import { Button, Grid } from "@material-ui/core";
 import Person from '@material-ui/icons/PersonRounded';
+import axios from "axios";
+import Pusher from 'pusher-js';
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ChatListTitle = styled.p`
@@ -35,7 +38,7 @@ const FriendName = styled(ChatListTitle)`
     margin-left: 24px;
 `;
 
-const ChatMessages =({ user }) => {
+const ChatMessages =({ message }) => {
 
     return (
         <FriendItemShell>
@@ -43,33 +46,59 @@ const ChatMessages =({ user }) => {
                 <Grid item>
                     <Person />
                 </Grid>
-                <Grid xs>
-                    <FriendName>{user.name}</FriendName>
+                <Grid item xs>
+                    <FriendName>{message.message}</FriendName>
                 </Grid>
             </Grid>
         </FriendItemShell>
     );
 }
 
-const ChatBox = () => (
+const ChatBox = () => {
+    const [messages, setMessages] = useState([]);
+    const [outgoingText, setOutgoingText] = useState();
+    useEffect(() => {
+        Pusher.logToConsole = true;
+        const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+            cluster: process.env.REACT_APP_PUSHER_CLUSTER,
+            forceTLS: true
+          });
+          const channel = pusher.subscribe('chat');
+          channel.bind('message', data => {
+              setMessages([...messages, data]);
+          });
+    }, []);
+
+    const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
+
+    const sendMessage = () => {
+        setOutgoingText();
+        const payload = {
+            username: 'traveler',
+            message: outgoingText
+          };
+          axios.post(`http://localhost:${process.env.REACT_APP_PORT}/message`, payload);
+    };
+
+    return (
         <Grid container direction="column" style={{ width: '100%', minHeight: '50vh' }}>
                 <Grid item>
                  <ChatListTitle>Message History</ChatListTitle>
                 </Grid>
                 <Grid item xs>
-                    <ChatMessages user={{ name: 'Karen' }} />
-                    <ChatMessages user={{ name: 'Stacy' }} />
-                    <ChatMessages user={{ name: 'Bob' }} />
+                    {messages.map(message => (
+                        <ChatMessages message={message} />
+                    ))}
                 </Grid>
                 <Grid item>
                  <Grid container alignItems="center" spacing={4}>
                      <Grid item xs>
                          <ChatSendInputtContainer>
-                             <ChatSendInput />
+                             <ChatSendInput value={outgoingText} onChange={onTextChanged}/>
                          </ChatSendInputtContainer>
                      </Grid>
                      <Grid item>
-                         <Button variant="contained" color="primary">
+                         <Button variant="contained" color="primary" disabled={!outgoingText} onClick={sendMessage}>
                              Send
                          </Button>
                      </Grid>
@@ -77,6 +106,7 @@ const ChatBox = () => (
                 </Grid>
          </Grid>
 
-);
+    );
+};
 
 export default ChatBox;

@@ -1,1 +1,1 @@
-import * from './contactActions';
+import * from "./contactActions";

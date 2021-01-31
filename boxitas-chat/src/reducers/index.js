@@ -3,6 +3,6 @@ import contactsReducer from "./contactsReducer";
 import selectedContactReducer from "./selectedContactReducer";
 
 export default combineReducers({
-    contactsReducer,
-    selectedContactReducer
+    contacts: contactsReducer,
+    selectedContact: selectedContactReducer
 });

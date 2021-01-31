@@ -1,6 +1,8 @@
 import { Grid } from "@material-ui/core";
 import Person from '@material-ui/icons/PersonRounded';
+import { connect } from "react-redux";
 import styled from "styled-components";
+import { selectContact } from "../../actions/contactActions";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
@@ -25,9 +27,8 @@ const ContactItemShell = styled(ChatListTitle)`
     &:hover {
         background: transparent;
         color: #3577d4;
-        font-weight: bold;
         cursor: pointer;
-        border: 2px solid #3577d4;
+        border-bottom: 1px solid #3577d4;
       }
 `;
 
@@ -36,10 +37,10 @@ const ContactName = styled(ChatListTitle)`
     margin-left: 24px;
 `;
 
-const ContactItem =({ contact }) => {
+const ContactItem =({ contact, onSelectContact }) => {
 
     return (
-        <ContactItemShell>
+        <ContactItemShell onClick={onSelectContact}>
             <Grid container alignItems="center">
                 <Grid item>
                     <Person />
@@ -52,8 +53,8 @@ const ContactItem =({ contact }) => {
     );
 }
 
-const ChatContactList = () => {
-    const [{ contactsReducer }, dispatch] = useReducer(reducer, []);
+const ChatContactList = ({contacts, doSelectContact}) => {
+    
 return (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
                 <Grid item>
@@ -69,8 +70,8 @@ return (
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    {contactsReducer.map(contact => (
-                        <ContactItem contact={contact} />
+                    {contacts.map(contact => (
+                        <ContactItem contact={contact} onSelectContact={() => doSelectContact(contact)}/>
                     ))}
                 </Grid>
                 <Grid item></Grid>
@@ -79,4 +80,8 @@ return (
 );
 }
 
-export default ChatContactList;
+const mapStateTopProps = ({contacts}) =>  ({
+    contacts
+    });
+
+export default connect(mapStateTopProps, { doSelectContact: selectContact })(ChatContactList);

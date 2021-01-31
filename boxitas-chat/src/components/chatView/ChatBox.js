@@ -1,10 +1,11 @@
 import { Button, Grid } from "@material-ui/core";
 import Person from '@material-ui/icons/PersonRounded';
 import axios from "axios";
+import { connect } from "react-redux";
 import Pusher from 'pusher-js';
-import { useEffect, useReducer, useState } from "react";
-import reducer from '../../reducers';
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import { registersSelectedContactMessage } from "../../actions/contactActions";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
@@ -55,10 +56,8 @@ const ChatMessages =({ message }) => {
     );
 }
 
-const ChatBox = () => {
-    const [messages, setMessages] = useState([]);
+const ChatBox = ({ selectedContact, registerMessage }) => {
     const [outgoingText, setOutgoingText] = useState();
-    const [{ selectedContactReducer }, dispatch] = useReducer(reducer, {});
     
     useEffect(() => {
         Pusher.logToConsole = true;
@@ -68,7 +67,7 @@ const ChatBox = () => {
           });
           const channel = pusher.subscribe('chat');
           channel.bind('message', data => {
-              setMessages([...messages, data]);
+            registerMessage(data);
           });
     }, []);
 
@@ -82,14 +81,14 @@ const ChatBox = () => {
           };
           axios.post(`http://localhost:${process.env.REACT_APP_PORT}/message`, payload);
     };
-
+     const { name, messages } = selectedContact;
     return (
         <Grid container direction="column" style={{ width: '100%', minHeight: '50vh' }}>
                 <Grid item>
-                 <ChatListTitle>Message History from {selectedContactReducer.name}</ChatListTitle>
+                 <ChatListTitle>Message history {name && `from ${name}`}</ChatListTitle>
                 </Grid>
                 <Grid item xs>
-                    {messages.map(message => (
+                    {messages?.map(message => (
                         <ChatMessages message={message} />
                     ))}
                 </Grid>
@@ -111,5 +110,8 @@ const ChatBox = () => {
 
     );
 };
+const mapStateTopProps = ({selectedContact}) =>  ({
+        selectedContact
+    });
 
-export default ChatBox;
+export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage })(ChatBox);

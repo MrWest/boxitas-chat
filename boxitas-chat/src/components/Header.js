@@ -1,4 +1,5 @@
-import { Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import styled from "styled-components";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
@@ -28,7 +29,12 @@ const LogoFrame = styled.div`
     width: 92px
 `;
 
-const Header = () => (
+const Header = () => {
+    const responseFacebook = (response) => {
+        console.log(response);
+      };
+
+    return (
     <CenteredFrame>
         <Grid container alignItems="center" style={{ height: '100%' }}>
             <Grid item >
@@ -40,12 +46,21 @@ const Header = () => (
             </Grid>
             <Grid item xs />
             <Grid item>
-                <LoginButton href="/chat" >
-                    Login
-                </LoginButton>
+            <FacebookLogin
+                appId="269776263974713"
+                fields="first_name, last_name ,email,picture"
+                callback={responseFacebook}
+                render={renderProps => (
+                    <Button variant="outlined" color="primary" onClick={() => renderProps.onClick()} >
+                        Login
+                    </Button>
+                )}
+                />
+                
             </Grid>
         </Grid>
     </CenteredFrame>
-);
+    );
+};
 
 export default Header;

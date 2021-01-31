@@ -21,7 +21,7 @@ const ChatSendInput = styled.textarea`
 const ChatSendInputtContainer = styled.div`
     display: flex;
 `;
-const FriendItemShell = styled(ChatListTitle)`
+const ContactItemShell = styled(ChatListTitle)`
     border-bottom: 1px solid #d4d9e2;
     background: #fafafa;
     &:hover {
@@ -33,7 +33,7 @@ const FriendItemShell = styled(ChatListTitle)`
       }
 `;
 
-const FriendName = styled(ChatListTitle)`
+const ContactName = styled(ChatListTitle)`
     font-size: 16;
     margin-left: 24px;
 `;
@@ -41,16 +41,16 @@ const FriendName = styled(ChatListTitle)`
 const ChatMessages =({ message }) => {
 
     return (
-        <FriendItemShell>
+        <ContactItemShell>
             <Grid container alignItems="center">
                 <Grid item>
                     <Person />
                 </Grid>
                 <Grid item xs>
-                    <FriendName>{message.message}</FriendName>
+                    <ContactName>{message.message}</ContactName>
                 </Grid>
             </Grid>
-        </FriendItemShell>
+        </ContactItemShell>
     );
 }
 

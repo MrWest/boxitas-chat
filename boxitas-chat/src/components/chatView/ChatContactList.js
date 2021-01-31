@@ -19,7 +19,7 @@ const ChatSearchInput = styled.input`
 const SearchInputContainer = styled.div`
     display: flex;
 `;
-const FriendItemShell = styled(ChatListTitle)`
+const ContactItemShell = styled(ChatListTitle)`
     border-bottom: 1px solid #d4d9e2;
     background: #fafafa;
     &:hover {
@@ -31,33 +31,33 @@ const FriendItemShell = styled(ChatListTitle)`
       }
 `;
 
-const FriendName = styled(ChatListTitle)`
+const ContactName = styled(ChatListTitle)`
     font-size: 16;
     margin-left: 24px;
 `;
 
-const FriendItem =({ user }) => {
+const ContactItem =({ user }) => {
 
     return (
-        <FriendItemShell>
+        <ContactItemShell>
             <Grid container alignItems="center">
                 <Grid item>
                     <Person />
                 </Grid>
                 <Grid xs>
-                    <FriendName>{user.name}</FriendName>
+                    <ContactName>{user.name}</ContactName>
                 </Grid>
             </Grid>
-        </FriendItemShell>
+        </ContactItemShell>
     );
 }
 
-const ChatFriendsList = () => (
+const ChatContactList = () => (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
                 <Grid item>
                     <Grid container alignItems="center" spacing={2}>
                         <Grid item>
-                            <ChatListTitle>Friend List</ChatListTitle>
+                            <ChatListTitle>Contact List</ChatListTitle>
                         </Grid>
                         <Grid item xs>
                             <SearchInputContainer>
@@ -67,13 +67,13 @@ const ChatFriendsList = () => (
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    <FriendItem user={{ name: 'Karen' }} />
-                    <FriendItem user={{ name: 'Stacy' }} />
-                    <FriendItem user={{ name: 'Bob' }} />
+                    <ContactItem user={{ name: 'Karen' }} />
+                    <ContactItem user={{ name: 'Stacy' }} />
+                    <ContactItem user={{ name: 'Bob' }} />
                 </Grid>
                 <Grid item></Grid>
          </Grid>
 
 );
 
-export default ChatFriendsList;
+export default ChatContactList;

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const jsonServer = () => {
 
-  const baseUrl = process.env.REACT_APP_BOXITAS_API;
+  const baseUrl = process.env.REACT_APP_BOXITAS_REST_API;
 
   const post = (path, payload) => {
       return axios.post(`${baseUrl}/${path}`, payload);

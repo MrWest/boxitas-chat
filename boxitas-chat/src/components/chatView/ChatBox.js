@@ -4,9 +4,9 @@ import Pusher from 'pusher-js';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { registersSelectedContactMessage } from "../../actions/contactActions";
-import expressServer from "../../apis/expressServer";
 import { ContactSmallFrame } from "./common";
 import { ImgStandard } from "../globals";
+import jsonServer from "../../apis/jsonServer";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
@@ -86,7 +86,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
 
     const sendMessage = () => {
-        const { post } = expressServer();
+        const { post } = jsonServer();
         setOutgoingText();
         const payload = {
             created: Date.now(),
@@ -96,7 +96,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
             message: outgoingText
           };
          
-          post(`message`, payload);
+          post(`messages`, payload);
     };
      const { name, messages } = selectedContact;
     return (

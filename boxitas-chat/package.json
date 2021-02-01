@@ -33,10 +33,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "express": "node server.js",
-    "fakeDB": "json-server --watch db.json --port 3004",
-    "dev": "npm run start-watch & npm run wp-server",
-    "deploy": "npm run start & npm run fakeDB & npm run express"
+    "dev": "npm run start-watch & npm run wp-server"
   },
   "eslintConfig": {
     "extends": [

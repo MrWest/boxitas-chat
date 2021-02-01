@@ -1,5 +1,6 @@
 import { Button, Grid } from "@material-ui/core";
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import FacebookLogin from 'react-facebook-login';
 import styled from "styled-components";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
@@ -47,15 +48,10 @@ const Header = () => {
             <Grid item xs />
             <Grid item>
             <FacebookLogin
-                appId="269776263974713"
-                fields="first_name, last_name ,email,picture"
-                callback={responseFacebook}
-                render={renderProps => (
-                    <Button variant="outlined" color="primary" onClick={renderProps.onClick} >
-                        Login
-                    </Button>
-                )}
-                />
+                appId="831923634071922"
+                autoLoad={true}
+                fields="name,email,picture"
+                callback={responseFacebook} />
                 
             </Grid>
         </Grid>

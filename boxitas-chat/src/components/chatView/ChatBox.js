@@ -6,6 +6,7 @@ import Pusher from 'pusher-js';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { registersSelectedContactMessage } from "../../actions/contactActions";
+import jsonServer from "../../apis/jsonServer";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
@@ -74,12 +75,14 @@ const ChatBox = ({ selectedContact, registerMessage }) => {
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
 
     const sendMessage = () => {
+        const { post } = jsonServer();
         setOutgoingText();
         const payload = {
             username: 'traveler',
             message: outgoingText
           };
-          axios.post(`http://localhost:${process.env.REACT_APP_PORT}/message`, payload);
+         
+          post(`message`, payload);
     };
      const { name, messages } = selectedContact;
     return (

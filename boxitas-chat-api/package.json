@@ -17,6 +17,7 @@
     "pusher": "^4.0.2",
     "pusher-js": "^7.0.3",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "json-server": "^0.16.2"
   }
 }

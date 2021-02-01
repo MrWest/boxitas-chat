@@ -2,9 +2,10 @@ import { Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import FacebookLogin from 'react-facebook-login';
 import styled from "styled-components";
-import jsonServer from "../apis/jsonServer";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
+import { connect } from "react-redux";
+import { contactLogin } from "../actions/contactActions";
 
 // const LoginButton = styled.a`
 //   color: white;
@@ -27,21 +28,31 @@ const ImgLogo = styled.img`
     width: 100%;
     object-fit: contain;
 `;
+const LoggedContact = styled.p`
+    font-size: 18px;
+    margin: 0px;
+`;
 const LogoFrame = styled.div`
     height: 72px;
     width: 92px
 `;
+const ContactFrame = styled.div`
+    height: 38px;
+    width: 38px;
+    border-radius: 19px;
+    overflow: hidden;
+`;
 
-const Header = () => {
+const Header = ({ myself, doContactLogin}) => {
     let history = useHistory();
     const responseFacebook = async response => {
       console.log(response);
       if(response.accessToken)
       {
-        const { post } = jsonServer();
-        const payload = { id: response.id, name: response.name, avatar: response?.picture.url };
-        await post('users', payload);
-        history.push('/chat');
+        const payload = { id: response.id, name: response.name, avatar: response?.picture?.data?.url };
+        const rslt = await doContactLogin(payload);
+        if(rslt.result === 'ok')
+          history.push('/chat');
       }
         
       };
@@ -58,16 +69,31 @@ const Header = () => {
             </Grid>
             <Grid item xs />
             <Grid item>
-            <FacebookLogin
+                {myself.id ? (
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs>
+                            <LoggedContact>{myself.name}</LoggedContact>
+                        </Grid>
+                        <Grid item>
+                            <ContactFrame>
+                                <ImgLogo src={myself.avatar} alt="logo" />
+                            </ContactFrame>
+                        </Grid>
+                    </Grid>
+                ) :
+            (<FacebookLogin
                 appId="831923634071922"
                 autoLoad={true}
                 fields="name,email,picture"
-                callback={responseFacebook} />
-                
+                callback={responseFacebook} />)
+            }
             </Grid>
         </Grid>
     </CenteredFrame>
     );
 };
+const mapStateTopProps = ({contacts}) =>  ({
+    myself: contacts.find(c => c.current) || {}
+});
 
-export default Header;
+export default connect(mapStateTopProps, { doContactLogin: contactLogin })(Header);

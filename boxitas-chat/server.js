@@ -17,7 +17,7 @@ const pusher = new Pusher({
   cluster: process.env.REACT_APP_PUSHER_CLUSTER
 });
 
-app.set('PORT', process.env.REACT_APP_PORT || 5000);
+app.set('PORT', process.env.REACT_APP_EXPRESS_PORT || 5000);
 
 
 app.post('/message', (req, res) => {

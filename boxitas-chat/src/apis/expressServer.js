@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const jsonServer = () => {
+const expressServer = () => {
 
-  const baseUrl = `http://${process.env.REACT_APP_BOXITAS_API}:${process.env.REACT_APP_API_PORT}`;
+  const baseUrl = `http://${process.env.REACT_APP_BOXITAS_API}:${process.env. REACT_APP_EXPRESS_PORT}`;
   console.log('baseUrl', baseUrl);
   const post = (path, payload) => {
       return axios.post(`${baseUrl}/${path}`, payload);
@@ -22,4 +22,4 @@ const jsonServer = () => {
   return { post, patch, put, del, get };
 };
 
-export default jsonServer;
+export default expressServer;

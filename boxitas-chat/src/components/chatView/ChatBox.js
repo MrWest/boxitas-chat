@@ -1,19 +1,18 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, TextField } from "@material-ui/core";
 import Person from '@material-ui/icons/PersonRounded';
-import axios from "axios";
 import { connect } from "react-redux";
 import Pusher from 'pusher-js';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { registersSelectedContactMessage } from "../../actions/contactActions";
-import jsonServer from "../../apis/jsonServer";
+import expressServer from "../../apis/expressServer";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
     margin: 0px;
     margin-right: 32px;
 `;
-const ChatSendInput = styled.textarea`
+const ChatSendInput = styled(TextField)`
     width: 100%;
     border-radius: 16px;
     padding: 16px 24px;
@@ -57,11 +56,10 @@ const ChatMessages =({ message }) => {
     );
 }
 
-const ChatBox = ({ selectedContact, registerMessage }) => {
+const ChatBox = ({ selectedContact, myself, registerMessage }) => {
     const [outgoingText, setOutgoingText] = useState();
     
     useEffect(() => {
-        Pusher.logToConsole = true;
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
             cluster: process.env.REACT_APP_PUSHER_CLUSTER,
             forceTLS: true
@@ -76,10 +74,11 @@ const ChatBox = ({ selectedContact, registerMessage }) => {
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
 
     const sendMessage = () => {
-        const { post } = jsonServer();
+        const { post } = expressServer();
         setOutgoingText();
         const payload = {
-            username: 'traveler',
+            created: Date.now(),
+            username: myself.name,
             message: outgoingText
           };
          
@@ -100,7 +99,7 @@ const ChatBox = ({ selectedContact, registerMessage }) => {
                  <Grid container alignItems="center" spacing={4}>
                      <Grid item xs>
                          <ChatSendInputtContainer>
-                             <ChatSendInput value={outgoingText} onChange={onTextChanged}/>
+                             <ChatSendInput value={outgoingText} onChange={onTextChanged} multiline />
                          </ChatSendInputtContainer>
                      </Grid>
                      <Grid item>
@@ -114,8 +113,9 @@ const ChatBox = ({ selectedContact, registerMessage }) => {
 
     );
 };
-const mapStateTopProps = ({selectedContact}) =>  ({
-        selectedContact
+const mapStateTopProps = ({selectedContact, contacts}) =>  ({
+        selectedContact,
+        myself: contacts.find(c => c.current) || { id: 1, name: "someUser"}
     });
 
 export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage })(ChatBox);

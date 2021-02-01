@@ -81,7 +81,7 @@ return (
 }
 
 const mapStateTopProps = ({contacts}) =>  ({
-    contacts
+     contacts
     });
 
 export default connect(mapStateTopProps, { doSelectContact: selectContact })(ChatContactList);

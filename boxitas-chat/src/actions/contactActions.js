@@ -11,17 +11,21 @@ export const registersSelectedContactMessage = message =>  dispatch => {
 
 export const contactLogin = contact => async dispatch => {
     console.log('contactLogin Action - Entering');
-    const { post } = jsonServer();
+    const { post, get, patch } = jsonServer();
     try {
-      const contactAPI =  await post('users', contact);
+      let contactAPI =  await get(`users/${contact.id}`);
+      if(contactAPI.status === 404) 
+        contactAPI =  await post('users', contact);
       if (contactAPI.status === 200) {
+          
         dispatch({
-          type: ONLINE_CONTACTS,
-          payload: contactAPI.data
+          type: CONTACT_LOGIN,
+          payload: contact
         });
-        return okAndLog('contactLogin', contactAPI.status, contactAPI.contact);
+        await patch(`users/${contact.id}`, contact);
+        return okAndLog('contactLogin', contactAPI.status, contact);
       }
-      return errorAndLog('contactLogin', contactAPI.status, contactAPI.data);
+      return errorAndLog('contactLogin', contactAPI.status, contact);
     } catch (e) {
       return errorAndLog('contactLogin', e.status, e.data);
     }
@@ -34,7 +38,7 @@ export const contactLogin = contact => async dispatch => {
       const contactAPI =  await get('users');
       if (contactAPI.status === 200) {
         dispatch({
-          type: CONTACT_LOGIN,
+          type: ONLINE_CONTACTS,
           payload: contactAPI.data
         });
         return okAndLog('contactLogin', contactAPI.status, contactAPI.contact);

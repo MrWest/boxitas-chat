@@ -6,6 +6,7 @@ import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
 import { connect } from "react-redux";
 import { contactLogin } from "../actions/contactActions";
+import { ImgStandard } from "./globals";
 
 // const LoginButton = styled.a`
 //   color: white;
@@ -23,11 +24,7 @@ import { contactLogin } from "../actions/contactActions";
 //     border: 2px solid #3577d4;
 //   }
 // `
-const ImgLogo = styled.img`
-    max-height: 100%;
-    width: 100%;
-    object-fit: contain;
-`;
+
 const LoggedContact = styled.p`
     font-size: 18px;
     margin: 0px;
@@ -63,7 +60,7 @@ const Header = ({ myself, doContactLogin}) => {
             <Grid item >
                 <a href="/">
                     <LogoFrame>
-                        <ImgLogo src={logo} alt="logo" />
+                        <ImgStandard src={logo} alt="logo" />
                     </LogoFrame>
                 </a>
             </Grid>
@@ -76,7 +73,7 @@ const Header = ({ myself, doContactLogin}) => {
                         </Grid>
                         <Grid item>
                             <ContactFrame>
-                                <ImgLogo src={myself.avatar} alt="logo" />
+                                <ImgStandard src={myself.avatar} alt="logo" />
                             </ContactFrame>
                         </Grid>
                     </Grid>

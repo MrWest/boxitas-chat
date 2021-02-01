@@ -3,6 +3,8 @@ import Person from '@material-ui/icons/PersonRounded';
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { selectContact } from "../../actions/contactActions";
+import { ImgStandard } from "../globals";
+import { ContactSmallFrame } from "./common";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
@@ -23,6 +25,7 @@ const SearchInputContainer = styled.div`
 `;
 const ContactItemShell = styled.div`
     border-bottom: 1px solid #d4d9e2;
+    padding: 4px 0px;
     background: #fafafa;
     &:hover {
         background: transparent;
@@ -34,16 +37,18 @@ const ContactItemShell = styled.div`
 
 const ContactName = styled(ChatListTitle)`
     font-size: 16;
-    margin-left: 24px;
+    margin: 0px;
 `;
 
 const ContactItem =({ contact, onSelectContact }) => {
 
     return (
         <ContactItemShell onClick={onSelectContact}>
-            <Grid container alignItems="center">
+            <Grid container spacing={2} alignItems="center">
                 <Grid item>
-                    <Person />
+                    <ContactSmallFrame>
+                        <ImgStandard src={contact.avatar} />
+                    </ContactSmallFrame>
                 </Grid>
                 <Grid item xs>
                     <ContactName>{contact.name}</ContactName>

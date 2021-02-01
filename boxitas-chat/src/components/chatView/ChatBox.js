@@ -1,11 +1,12 @@
 import { Button, Grid, TextField } from "@material-ui/core";
-import Person from '@material-ui/icons/PersonRounded';
 import { connect } from "react-redux";
 import Pusher from 'pusher-js';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { registersSelectedContactMessage } from "../../actions/contactActions";
 import expressServer from "../../apis/expressServer";
+import { ContactSmallFrame } from "./common";
+import { ImgStandard } from "../globals";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
@@ -26,13 +27,6 @@ const ChatSendInputtContainer = styled.div`
 const ContactItemShell = styled(ChatListTitle)`
     border-bottom: 1px solid #d4d9e2;
     background: #fafafa;
-    &:hover {
-        background: transparent;
-        color: #3577d4;
-        font-weight: bold;
-        cursor: pointer;
-        border: 2px solid #3577d4;
-      }
 `;
 
 const ContactName = styled(ChatListTitle)`
@@ -46,7 +40,9 @@ const ChatMessages =({ message }) => {
         <ContactItemShell>
             <Grid container alignItems="center">
                 <Grid item>
-                    <Person />
+                    <ContactSmallFrame>
+                        <ImgStandard src={message.senderAvatar} />
+                    </ContactSmallFrame>
                 </Grid>
                 <Grid item xs>
                     <ContactName>{message.message}</ContactName>
@@ -78,7 +74,9 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
         setOutgoingText();
         const payload = {
             created: Date.now(),
-            username: myself.name,
+            sender: myself.id,
+            senderAvatar: myself.avatar,
+            receiver: selectedContact.id,
             message: outgoingText
           };
          

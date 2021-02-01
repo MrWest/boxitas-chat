@@ -1,7 +1,8 @@
-import { Button, Grid } from "@material-ui/core";
-// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import { Grid } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import FacebookLogin from 'react-facebook-login';
 import styled from "styled-components";
+import jsonServer from "../apis/jsonServer";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
 
@@ -32,8 +33,17 @@ const LogoFrame = styled.div`
 `;
 
 const Header = () => {
-    const responseFacebook = response => {
-        console.log(response);
+    let history = useHistory();
+    const responseFacebook = async response => {
+      console.log(response);
+      if(response.accessToken)
+      {
+        const { post } = jsonServer();
+        const payload = { id: response.id, name: response.name, avatar: response?.picture.url };
+        await post('users', payload);
+        history.push('/chat');
+      }
+        
       };
 
     return (

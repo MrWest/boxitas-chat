@@ -8,7 +8,6 @@ const Title = styled.h1`
 const Home = () => (
     <CenteredFrame>
         <Title>You're Home</Title>
-        {process.env.REACT_APP_BOXITAS_API}
     </CenteredFrame>
 );
 

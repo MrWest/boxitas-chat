@@ -4,22 +4,23 @@ import FacebookLogin from 'react-facebook-login';
 import styled from "styled-components";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
-const LoginButton = styled.a`
-  color: white;
-  font-family: Roboto;
-  font-size: 16px;
-  padding: 6px 32px;
-  border: 2px solid white;
-  border-radius: 12px;
-  background: #3577d4;
-  &:hover {
-    background: transparent;
-    color: #3577d4;
-    font-weight: bold;
-    cursor: pointer;
-    border: 2px solid #3577d4;
-  }
-`
+
+// const LoginButton = styled.a`
+//   color: white;
+//   font-family: Roboto;
+//   font-size: 16px;
+//   padding: 6px 32px;
+//   border: 2px solid white;
+//   border-radius: 12px;
+//   background: #3577d4;
+//   &:hover {
+//     background: transparent;
+//     color: #3577d4;
+//     font-weight: bold;
+//     cursor: pointer;
+//     border: 2px solid #3577d4;
+//   }
+// `
 const ImgLogo = styled.img`
     max-height: 100%;
     width: 100%;

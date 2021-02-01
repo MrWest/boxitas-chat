@@ -21,7 +21,7 @@ const ChatSearchInput = styled.input`
 const SearchInputContainer = styled.div`
     display: flex;
 `;
-const ContactItemShell = styled(ChatListTitle)`
+const ContactItemShell = styled.div`
     border-bottom: 1px solid #d4d9e2;
     background: #fafafa;
     &:hover {
@@ -45,7 +45,7 @@ const ContactItem =({ contact, onSelectContact }) => {
                 <Grid item>
                     <Person />
                 </Grid>
-                <Grid xs>
+                <Grid item xs>
                     <ContactName>{contact.name}</ContactName>
                 </Grid>
             </Grid>
@@ -71,7 +71,7 @@ return (
                 </Grid>
                 <Grid item xs>
                     {contacts.map(contact => (
-                        <ContactItem contact={contact} onSelectContact={() => doSelectContact(contact)}/>
+                        <ContactItem key={contact.name} contact={contact} onSelectContact={() => doSelectContact(contact)}/>
                     ))}
                 </Grid>
                 <Grid item></Grid>

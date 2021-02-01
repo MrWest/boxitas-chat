@@ -14,8 +14,9 @@ const port = process.env.PORT || 3000;
 
 server.use(middlewares);
 server.use(router);
+server.pos
 
-server.listen(port);
+//server.listen(port);
 
 // app.use(cors());
 // app.use(bodyParser.urlencoded({extended: false}));

@@ -2,8 +2,27 @@ import jsonServer from "../apis/jsonServer";
 import { errorAndLog, okAndLog } from "../helpers/utils";
 import {  SELECT_CONTACT, REGISTER_MESSAGE, CONTACT_LOGIN, ONLINE_CONTACTS } from "./types";
 
-export const selectContact = contact => dispatch => {
-    dispatch({ type: SELECT_CONTACT, payload: contact });
+export const selectContact = (contact, myself) => async dispatch => {
+  console.log('selectContact Action - Entering');
+  const { get, filter } = jsonServer();
+   
+  try {
+    
+    const contactAPI =  await get('users', contact.id);
+    if(contactAPI.status < 400)  {
+      const receivedMessagesAPI =  await filter('messages', `sender=${contact.id}& receiver=${myself.id}`);
+      const sentMessagesAPI =  await filter('messages', `sender=${myself.id}& receiver=${contact.id}`);
+
+      const messages = [...receivedMessagesAPI.data, sentMessagesAPI.data ].sort((a,b) => a.created > b.created);
+
+      dispatch({ type: SELECT_CONTACT, payload: contact });
+      return okAndLog('contactLogin', contactAPI.status, {...contact, messages});
+    }
+    return errorAndLog('contactLogin', contactAPI.status, contact);
+  } catch (e) {
+    return errorAndLog('contactLogin', e.status, e.data);
+  }
+   
 };
 export const registersSelectedContactMessage = message =>  dispatch => {
     dispatch({ type: REGISTER_MESSAGE, payload: message });

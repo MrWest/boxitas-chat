@@ -19,8 +19,8 @@ const jsonServer = () => {
   const get = path  => {
         return axios.get(`${baseUrl}/${path}`);
   }
-  const filter = (path, query)  => {
-    return axios.get(`${baseUrl}/${path}?${query}`);
+  const filter = (path, query, sort = { order: 'desc' })  => {
+    return axios.get(`${baseUrl}/${path}?${query}${sort.sort? `&_sort=${sort.sort}&_order=${sort.order || 'desc'}`: ''}`);
   }
   return { post, patch, put, del, get, filter };
 };

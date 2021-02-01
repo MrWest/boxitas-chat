@@ -58,7 +58,7 @@ const ContactItem =({ contact, onSelectContact }) => {
     );
 }
 
-const ChatContactList = ({contacts, doSelectContact}) => {
+const ChatContactList = ({contacts, myself, doSelectContact}) => {
     
 return (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
@@ -76,7 +76,7 @@ return (
                 </Grid>
                 <Grid item xs>
                     {contacts.map(contact => (
-                        <ContactItem key={contact.name} contact={contact} onSelectContact={() => doSelectContact(contact)}/>
+                        <ContactItem key={contact.name} contact={contact} onSelectContact={() => doSelectContact(contact, myself)}/>
                     ))}
                 </Grid>
                 <Grid item></Grid>
@@ -86,7 +86,8 @@ return (
 }
 
 const mapStateTopProps = ({contacts}) =>  ({
-     contacts
+     contacts,
+     myself: contacts.filter(c => c.current) || {}
     });
 
 export default connect(mapStateTopProps, { doSelectContact: selectContact })(ChatContactList);

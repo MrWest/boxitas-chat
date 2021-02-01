@@ -11,13 +11,14 @@ export const registersSelectedContactMessage = message =>  dispatch => {
 
 export const contactLogin = contact => async dispatch => {
     console.log('contactLogin Action - Entering');
-    const { post, get, patch } = jsonServer();
-    
-      let contactAPI =  await get(`users/${contact.id}`);
+    const { post, filter, patch } = jsonServer();
+     
     try {
-      if(contactAPI.status === 404) 
+      
+      let contactAPI =  await filter('users', `id=${contact.id}`);
+      if(!contactAPI.data.length) 
         contactAPI =  await post('users', contact);
-      if (contactAPI.status === 200) {
+      else {
           
         dispatch({
           type: CONTACT_LOGIN,

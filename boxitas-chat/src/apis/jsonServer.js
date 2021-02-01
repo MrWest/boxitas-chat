@@ -19,7 +19,10 @@ const jsonServer = () => {
   const get = path  => {
         return axios.get(`${baseUrl}/${path}`);
   }
-  return { post, patch, put, del, get };
+  const filter = (path, query)  => {
+    return axios.get(`${baseUrl}/${path}?${query}`);
+  }
+  return { post, patch, put, del, get, filter };
 };
 
 export default jsonServer;

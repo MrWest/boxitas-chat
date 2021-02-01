@@ -30,7 +30,7 @@ const LogoFrame = styled.div`
 `;
 
 const Header = () => {
-    const responseFacebook = (response) => {
+    const responseFacebook = response => {
         console.log(response);
       };
 
@@ -51,7 +51,7 @@ const Header = () => {
                 fields="first_name, last_name ,email,picture"
                 callback={responseFacebook}
                 render={renderProps => (
-                    <Button variant="outlined" color="primary" onClick={() => renderProps.onClick()} >
+                    <Button variant="outlined" color="primary" onClick={renderProps.onClick} >
                         Login
                     </Button>
                 )}

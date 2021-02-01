@@ -2,7 +2,7 @@ import axios from "axios";
 
 const expressServer = () => {
 
-  const baseUrl = `http://${process.env.REACT_APP_BOXITAS_API}:${process.env. REACT_APP_EXPRESS_PORT}`;
+  const baseUrl = `http${process.env.REACT_APP_HTTPS? 's' : ''}://${process.env.REACT_APP_BOXITAS_API}:${process.env. REACT_APP_EXPRESS_PORT}`;
 
   const post = (path, payload) => {
       return axios.post(`${baseUrl}/${path}`, payload);

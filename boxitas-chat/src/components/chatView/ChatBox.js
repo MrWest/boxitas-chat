@@ -48,11 +48,12 @@ const Message = styled(ChatListTitle)`
 `;
 
 const ChatMessages =({ message, isSent }) => {
+   const time = new Date(message.created);
 
     return (
         <div>
             <Grid justify="center">
-                <TimeText>{message.created}</TimeText>
+                <TimeText>{time.toLocaleDateString()}</TimeText>
             </Grid>
             <Grid container spacing={2} justify={isSent? "flex-end" : "flex-start"} >
                 {!isSent && 
@@ -62,7 +63,7 @@ const ChatMessages =({ message, isSent }) => {
                     </ContactSmallFrame>
                 </Grid>
                 }
-                <Grid item >
+                <Grid item style={{ maxWidth: '70%' }}>
                     <MessageBulb isSent={isSent}>
                         <Message>{message.message}</Message>
                     </MessageBulb>

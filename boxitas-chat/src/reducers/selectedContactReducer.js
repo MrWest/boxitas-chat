@@ -5,7 +5,7 @@ const selectedContactReducer = (state = {}, action)  => {
         case SELECT_CONTACT:
           return action.payload;
         case REGISTER_MESSAGE:
-            return {...state, messages: [...state.messages || [], action.payload] };
+            return state.id ? {...state, messages: [...state.messages || [], action.payload] } : {};
         case MESSAGE_WAS_VIEWED: 
             return {...state, messages: state.messages
               .map(msg => msg.created !== action.payload.created ? msg : action.payload) };

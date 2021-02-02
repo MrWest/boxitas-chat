@@ -119,6 +119,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
         const { post } = jsonServer();
         setOutgoingText('');
         const payload = {
+            id: Date.now(),
             created: Date.now(),
             sender: myself.id,
             senderAvatar: myself.avatar,

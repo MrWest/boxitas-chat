@@ -1,7 +1,7 @@
 import jsonServer from "../apis/jsonServer";
 import { errorAndLog, okAndLog } from "../helpers/utils";
 import {  SELECT_CONTACT, REGISTER_MESSAGE, CONTACT_LOGIN,
-   ONLINE_CONTACTS, CONTACT_LOGOUT } from "./types";
+   SUBSCRIBED_CONTACTS, CONTACT_LOGOUT } from "./types";
 
 export const selectContact = (contact, myself) => async dispatch => {
   console.log('selectContact Action - Entering');
@@ -81,7 +81,7 @@ export const contactLogin = contact => async dispatch => {
       const contactAPI =  await get('users');
       if (contactAPI.status === 200) {
         dispatch({
-          type: ONLINE_CONTACTS,
+          type: SUBSCRIBED_CONTACTS,
           payload: contactAPI.data
         });
         return okAndLog('contactLogin', contactAPI.status, contactAPI.contact);

@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CenteredFrame from "./globals/CenterdFrame";
 
@@ -14,13 +14,13 @@ const ButtonContainer = styled.div`
 `;
 
 const Home = ({ myself }) => {
-    const location = useLocation();
+    const history = useHistory();
     return (
     <CenteredFrame>
         <Title>You're Home</Title>
-        {myself && <ButtonContainer>
-                        <Button size="large" variant="contained" color="primary" onClick={() => location.push('/chat')}>Let's Chat!!!</Button>
-                    </ButtonContainer>}
+        <ButtonContainer>
+             <Button size="large" variant="contained" color="primary" onClick={() => history.push('/chat')}>Let's Chat!!!</Button>
+        </ButtonContainer>
     </CenteredFrame>
     );
 };

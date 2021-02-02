@@ -43,8 +43,8 @@ const AvatarFrame = styled.div`
     position: relative;
 `;
 const LogoutButton = styled.button`
-    height: 16px;
-    width: 16px;
+    height: 15px;
+    width: 15px;
     font-size: 12px;
     border-radius: 8px;
     position: absolute;

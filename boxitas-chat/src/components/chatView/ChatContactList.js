@@ -42,8 +42,8 @@ const ContactName = styled(ChatListTitle)`
 `;
 const OnlineDot = styled.div`
     height: 16px;
-    widdth: 16px;
-    bordder-radius: 8px;
+    width: 16px;
+    border-radius: 8px;
     background: ${props => props.isOnline ? '#31a24c' : '#828282' };
 `;
 

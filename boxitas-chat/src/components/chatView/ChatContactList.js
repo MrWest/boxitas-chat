@@ -48,11 +48,14 @@ const OnlineDot = styled.div`
     background: ${props => props.isOnline ? '#31a24c' : '#828282' };
 `;
 const NewMessage = styled(MessageRounded)`
-    font-size: 12px;
     background: #31a24c;
     color: white;
+    padding: 3px;
+    border-radius: 8px;
+    height: 10px;
+    width: 10px;
     position: absolute;
-    top: -12px;
+    top: -6px;
     right: -12px;
 `
 
@@ -62,10 +65,13 @@ const ContactItem =({ contact, onSelectContact }) => {
         <ContactItemShell onClick={onSelectContact}>
             <Grid container spacing={2} alignItems="center">
                 <Grid item>
-                    <ContactSmallFrame>
-                        <ImgStandard src={contact.avatar} />
+                    <div style={{ position: "relative"}}>
+                        <ContactSmallFrame>
+                            <ImgStandard src={contact.avatar} />
+                        
+                        </ContactSmallFrame>
                         {contact.hasNewMessages && <NewMessage />}
-                    </ContactSmallFrame>
+                    </div>
                 </Grid>
                 <Grid item xs>
                     <ContactName>{contact.name}</ContactName>

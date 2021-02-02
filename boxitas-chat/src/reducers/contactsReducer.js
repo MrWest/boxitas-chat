@@ -13,7 +13,7 @@ const contactsReducer = (state = [], action)  => {
             contact :  {...action.payload, current: false})
         case NOTIFY_MESSAGES:
           return state.map(contact => ({...contact, hasNewMessages: !! action.payload.find(message =>
-            message.receiver === contact.id)}));
+            message.sender === contact.id)}));
         default:
           return state;
       }

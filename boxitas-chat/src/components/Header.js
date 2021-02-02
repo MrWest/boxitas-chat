@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import FacebookLogin from 'react-facebook-login';
 import styled from "styled-components";
-import logo from '../logo.svg';
+import logo from '../boxitas.png';
 import CenteredFrame from "./globals/CenterdFrame";
 import { connect } from "react-redux";
 import { contactLogin, contactLogout, getContacts } from "../actions/contactActions";
@@ -30,8 +30,8 @@ const LoggedContact = styled.p`
     margin: 0px;
 `;
 const LogoFrame = styled.div`
-    height: 72px;
-    width: 92px
+    height: 56px;
+    width: 56px
 `;
 const ContactFrame = styled.div`
     height: 38px;
@@ -105,6 +105,7 @@ const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
                 ) :
             (<FacebookLogin
                 appId="831923634071922"
+                size="medium"
                 autoLoad={false}
                 fields="name,email,picture"
                 callback={responseFacebook} />)

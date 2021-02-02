@@ -78,6 +78,7 @@ return (
                 <Grid item>
                     <Grid container alignItems="center" spacing={2} style={{ paddingBottom: 8 }}>
                         <Grid item>
+                            {myself.name}
                             <ChatListTitle>Contact List</ChatListTitle>
                         </Grid>
                         <Grid item xs>
@@ -100,7 +101,7 @@ return (
 
 const mapStateTopProps = ({contacts}) =>  ({
      contacts,
-     myself: contacts.filter(c => c.current) || {}
+     myself: contacts.find(c => c.current) || {}
     });
 
 export default connect(mapStateTopProps, { doSelectContact: selectContact, doGetContacts: getContacts })(ChatContactList);

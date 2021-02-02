@@ -52,8 +52,8 @@ const NewMessage = styled(MessageRounded)`
     color: white;
     padding: 3px;
     border-radius: 8px;
-    height: 10px;
-    width: 10px;
+    height: 10px !important;
+    width: 10px !important;
     position: absolute;
     top: -6px;
     right: -12px;

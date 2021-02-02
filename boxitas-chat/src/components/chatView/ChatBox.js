@@ -27,6 +27,11 @@ const ChatSendInput = styled(TextField)`
     outline: none;
     position: relative;
 `;
+const SendButton = styled(Button)`
+    height: 92px;
+    width: 142px;
+    font-size: 32px;
+`
 const ChatSendInputtContainer = styled.div`
     display: flex;
 `;
@@ -110,16 +115,20 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
                     ))}
                 </Grid>
                 <Grid item>
-                 <Grid container alignItems="center" spacing={4}>
+                 <Grid container alignItems="center" spacing={1}>
                      <Grid item xs>
                          <ChatSendInputtContainer>
-                             <ChatSendInput value={outgoingText} onChange={onTextChanged} multiline />
+                             <ChatSendInput value={outgoingText} onChange={onTextChanged}
+                                variant="outlined"
+                                multiline
+                                rows={3}
+                                rowsMax={3} />
                          </ChatSendInputtContainer>
                      </Grid>
                      <Grid item>
-                         <Button variant="contained" color="primary" disabled={!outgoingText} onClick={sendMessage}>
+                         <SendButton variant="contained" color="primary" disabled={!outgoingText} onClick={sendMessage}>
                              Send
-                         </Button>
+                         </SendButton>
                      </Grid>
                  </Grid>
                 </Grid>

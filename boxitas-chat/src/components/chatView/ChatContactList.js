@@ -1,8 +1,9 @@
 import { Grid } from "@material-ui/core";
-import Person from '@material-ui/icons/PersonRounded';
+import Pusher from 'pusher-js';
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { selectContact } from "../../actions/contactActions";
+import { getContacts, selectContact } from "../../actions/contactActions";
 import { ImgStandard } from "../globals";
 import { ContactSmallFrame } from "./common";
 
@@ -58,12 +59,24 @@ const ContactItem =({ contact, onSelectContact }) => {
     );
 }
 
-const ChatContactList = ({contacts, myself, doSelectContact}) => {
+const ChatContactList = ({contacts, myself, doSelectContact, doGetContacts}) => {
+
+    useEffect(() => {
+        const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+            cluster: process.env.REACT_APP_PUSHER_CLUSTER,
+            forceTLS: true
+          });
+          const channel = pusher.subscribe('chat');
+          channel.bind('user', () => {
+            doGetContacts();
+          });
+        return () => pusher.unsubscribe('chat');
+    }, []);
     
 return (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
                 <Grid item>
-                    <Grid container alignItems="center" spacing={2}>
+                    <Grid container alignItems="center" spacing={2} style={{ paddingBottom: 8 }}>
                         <Grid item>
                             <ChatListTitle>Contact List</ChatListTitle>
                         </Grid>
@@ -90,4 +103,4 @@ const mapStateTopProps = ({contacts}) =>  ({
      myself: contacts.filter(c => c.current) || {}
     });
 
-export default connect(mapStateTopProps, { doSelectContact: selectContact })(ChatContactList);
+export default connect(mapStateTopProps, { doSelectContact: selectContact, doGetContacts: getContacts })(ChatContactList);

@@ -58,7 +58,7 @@ export const contactLogin = contact => async dispatch => {
     const { patch } = jsonServer();
      
     try {
-      const loggedoutContact = {...contact, isOnline: false };
+      const loggedoutContact = {...contact, isOnline: false, current: false };
       await patch(`users/${contact.id}`, loggedoutContact);
      
           

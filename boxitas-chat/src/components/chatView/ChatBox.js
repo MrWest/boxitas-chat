@@ -93,7 +93,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
 
     const sendMessage = () => {
         const { post } = jsonServer();
-        setOutgoingText('kkk');
+        setOutgoingText('');
         const payload = {
             created: Date.now(),
             sender: myself.id,
@@ -104,6 +104,9 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
          
           post(`messages`, payload);
     };
+
+    const onKeyDown = ({ keyCode }) => keyCode === 13 && sendMessage();
+
      const { name, messages } = selectedContact;
     return (
         <Grid container direction="column" style={{ width: '100%', minHeight: '50vh' }}>
@@ -119,7 +122,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
                  <Grid container alignItems="center" spacing={1}>
                      <Grid item xs>
                          <ChatSendInputtContainer>
-                             <ChatSendInput value={outgoingText} onChange={onTextChanged}
+                             <ChatSendInput value={outgoingText} onChange={onTextChanged} onKeyUp={onKeyDown}
                                 variant="outlined"
                                 multiline
                                 rows={3}

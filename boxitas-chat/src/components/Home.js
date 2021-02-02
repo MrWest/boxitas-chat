@@ -18,9 +18,9 @@ const Home = ({ myself }) => {
     return (
     <CenteredFrame>
         <Title>You're Home</Title>
-        <ButtonContainer>
-             <Button size="large" variant="contained" color="primary" onClick={() => history.push('/chat')}>Let's Chat!!!</Button>
-        </ButtonContainer>
+        {myself && <ButtonContainer>
+                        <Button size="large" variant="contained" color="primary" onClick={() => history.push('/chat')}>Let's Chat!!!</Button>
+                    </ButtonContainer>}
     </CenteredFrame>
     );
 };

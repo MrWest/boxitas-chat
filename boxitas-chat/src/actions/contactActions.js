@@ -98,7 +98,7 @@ export const contactLogin = contact => async dispatch => {
     const { patch } = jsonServer();
     try {
       const viewedMessage = {...message, wasViewed: true}
-      const messagestAPI =  await patch('message', viewedMessage);
+      const messagestAPI =  await patch(`messages/${message.id}`, viewedMessage);
       if (messagestAPI.status === 200) {
         dispatch({
           type: MESSAGE_WAS_VIEWED,

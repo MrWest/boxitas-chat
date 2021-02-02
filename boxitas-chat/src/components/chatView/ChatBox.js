@@ -2,6 +2,7 @@ import { Button, Grid, TextField } from "@material-ui/core";
 import { Check } from "@material-ui/icons";
 import { connect } from "react-redux";
 import Pusher from 'pusher-js';
+import moment from 'moment';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { registersSelectedContactMessage, setMessageWasViewed } from "../../actions/contactActions";
@@ -50,21 +51,32 @@ const Message = styled(ChatListTitle)`
 `;
 
 const CheckIcon = styled(Check)`
-    font-size: 12px;
     background: #31a24c;
     color: white;
     position: absolute;
-    bottom: 6px;
-    right: 6px;
+    bottom: 1px;
+    right: -5px;
+    padding: 3px;
+    border-radius: 8px;
+    height: 10px !important;
+    width: 10px !important;
 `;
 
-const ChatMessages =({ message, isSent, onShown }) => {
-   const time = new Date(message.created);
+const timeDiff = (date1, date2) => Math.abs(date2.getTime() - date1.getTime());
+
+const oneMinute = 60 * 1000;
+const Timestamp = ({ message, previous }) => {
+  const timestamp = new Date(message.created);
+  const show = !previous || timeDiff(timestamp, new Date(previous.created)) > oneMinute;
+  return show && <TimeText>{moment(timestamp).format('MM/DD hh:mm A')}</TimeText>;
+};
+
+const ChatMessages =({ message, isSent, onShown, previous }) => {
     if(!message.wasViewed) onShown(message);
     return (
         <div>
             <Grid justify="center">
-                <TimeText>{time.toLocaleDateString()}</TimeText>
+                <Timestamp message={message} previous={previous} />
             </Grid>
             <Grid container spacing={2} justify={isSent? "flex-end" : "flex-start"} >
                 {!isSent && 
@@ -77,7 +89,7 @@ const ChatMessages =({ message, isSent, onShown }) => {
                 <Grid item style={{ maxWidth: '70%' }}>
                     <MessageBulb isSent={isSent}>
                         <Message>{message.message}</Message>
-                        {message.wasViewed && <CheckIcon />}
+                        {isSent&&message.wasViewed && <CheckIcon />}
                     </MessageBulb>
                 </Grid>
             </Grid>
@@ -127,8 +139,9 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
                  <ChatListTitle>Message history {name && `from ${name}`}</ChatListTitle>
                 </Grid>
                 <Grid item xs>
-                    {selectedContact.id && messages?.map(message => (
-                       message.sender !== message.receiver && <ChatMessages message={message} isSent={message.sender === myself.id} onShown={messageWasViewed} />
+                    {selectedContact.id && messages?.map((message, idx) => (
+                       message.sender !== message.receiver && <ChatMessages message={message} 
+                       isSent={message.sender === myself.id} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
                     ))}
                 </Grid>
                 <Grid item>

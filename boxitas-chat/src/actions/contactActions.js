@@ -11,8 +11,8 @@ export const selectContact = (contact, myself) => async dispatch => {
     
     const contactAPI =  await get('users', contact.id);
     if(contactAPI.status < 400)  {
-      const receivedMessagesAPI =  await filter('messages', `sender=${contact.id}& receiver=${myself.id}`);
-      const sentMessagesAPI =  await filter('messages', `sender=${myself.id}& receiver=${contact.id}`);
+      const receivedMessagesAPI =  await filter('messages', `sender=${contact.id}&receiver=${myself.id}`);
+      const sentMessagesAPI =  await filter('messages', `sender=${myself.id}&receiver=${contact.id}`);
 
       const messages = [...receivedMessagesAPI.data, ...sentMessagesAPI.data ].sort((a,b) => a.created > b.created);
 

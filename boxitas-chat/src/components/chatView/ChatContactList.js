@@ -40,6 +40,12 @@ const ContactName = styled(ChatListTitle)`
     font-size: 16;
     margin: 0px;
 `;
+const OnlineDot = styled.div`
+    height: 16px;
+    widdth: 16px;
+    bordder-radius: 8px;
+    background: ${props => props.isOnline ? '#31a24c' : '#828282' };
+`;
 
 const ContactItem =({ contact, onSelectContact }) => {
 
@@ -53,6 +59,9 @@ const ContactItem =({ contact, onSelectContact }) => {
                 </Grid>
                 <Grid item xs>
                     <ContactName>{contact.name}</ContactName>
+                </Grid>
+                <Grid item>
+                    <OnlineDot isOnline={contact.isOnline} />
                 </Grid>
             </Grid>
         </ContactItemShell>

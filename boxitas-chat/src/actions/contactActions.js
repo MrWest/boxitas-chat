@@ -44,7 +44,7 @@ export const contactLogin = contact => async dispatch => {
           type: CONTACT_LOGIN,
           payload: contact
         });
-        await patch(`users/${contact.id}`, contact);
+        await patch(`users/${contact.id}`, {...contact, isOnline: true });
         return okAndLog('contactLogin', contactAPI.status, contact);
       }
       return errorAndLog('contactLogin', contactAPI.status, contact);
@@ -58,7 +58,7 @@ export const contactLogin = contact => async dispatch => {
     const { patch } = jsonServer();
      
     try {
-      await patch(`users/${contact.id}`, {...contact, isLoggedIn: false });
+      await patch(`users/${contact.id}`, {...contact, isOnline: false });
      
           
         dispatch({
@@ -66,7 +66,7 @@ export const contactLogin = contact => async dispatch => {
           payload: contact
         });
        
-        return okAndLog('contactLogout', contactAPI.status, contact);
+        return okAndLog('contactLogout', 200, contact);
      
     } catch (e) {
       return errorAndLog('contactLogout', e.status, e.data);

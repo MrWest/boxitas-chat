@@ -5,7 +5,7 @@ import styled from "styled-components";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
 import { connect } from "react-redux";
-import { contactLogin, getContacts } from "../actions/contactActions";
+import { contactLogin, contactLogout, getContacts } from "../actions/contactActions";
 import { ImgStandard } from "./globals";
 
 // const LoginButton = styled.a`
@@ -55,9 +55,13 @@ const LogoutButton = styled.button`
     right: -10px;
     padding: 0px 0px 1px 1px;
     cursor: pointer;
+    outline: none;
+    &:hover {
+        background: #d14; 
+    }
 `;
 
-const Header = ({ myself, doContactLogin, doGetContacts}) => {
+const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
     let history = useHistory();
     const responseFacebook = async response => {
       console.log(response);
@@ -94,7 +98,7 @@ const Header = ({ myself, doContactLogin, doGetContacts}) => {
                                 <ContactFrame>
                                     <ImgStandard src={myself.avatar} alt="logo" />
                                 </ContactFrame>
-                                <LogoutButton onClick={()=> alert('kk')} title="Logout" >x</LogoutButton>
+                                <LogoutButton onClick={()=> doContactLogout(myself)} title="Logout" >x</LogoutButton>
                             </AvatarFrame>
                         </Grid>
                     </Grid>
@@ -114,4 +118,5 @@ const mapStateTopProps = ({contacts}) =>  ({
     myself: contacts.find(c => c.current) || {}
 });
 
-export default connect(mapStateTopProps, { doContactLogin: contactLogin, doGetContacts: getContacts })(Header);
+export default connect(mapStateTopProps, { doContactLogin: contactLogin, 
+    doGetContacts: getContacts, doContactLogout: contactLogout })(Header);

@@ -111,7 +111,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
                  <ChatListTitle>Message history {name && `from ${name}`}</ChatListTitle>
                 </Grid>
                 <Grid item xs>
-                    {messages?.map(message => (
+                    {selectedContact.id && messages?.map(message => (
                         <ChatMessages message={message} isSent={message.sender === myself.id}/>
                     ))}
                 </Grid>

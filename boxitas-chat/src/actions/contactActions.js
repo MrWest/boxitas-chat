@@ -58,15 +58,16 @@ export const contactLogin = contact => async dispatch => {
     const { patch } = jsonServer();
      
     try {
-      await patch(`users/${contact.id}`, {...contact, isOnline: false });
+      const loggedoutContact = {...contact, isOnline: false };
+      await patch(`users/${contact.id}`, loggedoutContact);
      
           
         dispatch({
           type: CONTACT_LOGOUT,
-          payload: contact
+          payload: loggedoutContact
         });
        
-        return okAndLog('contactLogout', 200, contact);
+        return okAndLog('contactLogout', 200, loggedoutContact);
      
     } catch (e) {
       return errorAndLog('contactLogout', e.status, e.data);

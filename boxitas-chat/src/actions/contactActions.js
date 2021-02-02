@@ -1,6 +1,7 @@
 import jsonServer from "../apis/jsonServer";
 import { errorAndLog, okAndLog } from "../helpers/utils";
-import {  SELECT_CONTACT, REGISTER_MESSAGE, CONTACT_LOGIN, ONLINE_CONTACTS } from "./types";
+import {  SELECT_CONTACT, REGISTER_MESSAGE, CONTACT_LOGIN,
+   ONLINE_CONTACTS, CONTACT_LOGOUT } from "./types";
 
 export const selectContact = (contact, myself) => async dispatch => {
   console.log('selectContact Action - Entering');
@@ -49,6 +50,26 @@ export const contactLogin = contact => async dispatch => {
       return errorAndLog('contactLogin', contactAPI.status, contact);
     } catch (e) {
       return errorAndLog('contactLogin', e.status, e.data);
+    }
+  };
+
+  export const contactLogout = contact => async dispatch => {
+    console.log('contactLogout Action - Entering');
+    const { patch } = jsonServer();
+     
+    try {
+      await patch(`users/${contact.id}`, {...contact, isLoggedIn: false });
+     
+          
+        dispatch({
+          type: CONTACT_LOGOUT,
+          payload: contact
+        });
+       
+        return okAndLog('contactLogout', contactAPI.status, contact);
+     
+    } catch (e) {
+      return errorAndLog('contactLogout', e.status, e.data);
     }
   };
 

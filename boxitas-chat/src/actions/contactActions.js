@@ -31,12 +31,12 @@ export const registersSelectedContactMessage = message =>  dispatch => {
 
 export const contactLogin = contact => async dispatch => {
     console.log('contactLogin Action - Entering');
-    const { post, get, patch } = jsonServer();
+    const { post, filter, patch } = jsonServer();
      
     try {
       const loggedContact = {...contact, isOnline: true };
-      let contactAPI =  await get('users', contact.id);
-      if(!contactAPI.data.id) 
+      let contactAPI =  await filter('users', `id=${contact.id}`);
+      if(!contactAPI.data.length) 
         contactAPI =  await post('users', loggedContact);
       else 
         await patch(`users/${contact.id}`, loggedContact);

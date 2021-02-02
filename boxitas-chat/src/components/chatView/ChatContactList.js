@@ -79,7 +79,7 @@ const ChatContactList = ({contacts, myself, doSelectContact, doGetContacts}) => 
           channel.bind('user', () => {
             doGetContacts();
           });
-        return () => pusher.unsubscribe('chat');
+        // return () => pusher.unsubscribe('chat');
     }, []);
     
 return (

@@ -86,7 +86,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
           channel.bind('message', data => {
             registerMessage(data);
           });
-        return () => pusher.unsubscribe('chat');
+        // return () => pusher.unsubscribe('chat');
     }, []);
 
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);

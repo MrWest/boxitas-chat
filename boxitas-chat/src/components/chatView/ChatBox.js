@@ -112,7 +112,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
                 </Grid>
                 <Grid item xs>
                     {selectedContact.id && messages?.map(message => (
-                        <ChatMessages message={message} isSent={message.sender === myself.id}/>
+                       message.sender !== message.receiver && <ChatMessages message={message} isSent={message.sender === myself.id}/>
                     ))}
                 </Grid>
                 <Grid item>

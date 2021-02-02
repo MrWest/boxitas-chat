@@ -15,8 +15,8 @@ export const selectContact = (contact, myself) => async dispatch => {
 
       const messages = [...receivedMessagesAPI.data, sentMessagesAPI.data ].sort((a,b) => a.created > b.created);
 
-      dispatch({ type: SELECT_CONTACT, payload: contact });
-      return okAndLog('contactLogin', contactAPI.status, {...contact, messages});
+      dispatch({ type: SELECT_CONTACT, payload: {...contact, messages} });
+      return okAndLog('contactLogin', contactAPI.status, contact);
     }
     return errorAndLog('contactLogin', contactAPI.status, contact);
   } catch (e) {

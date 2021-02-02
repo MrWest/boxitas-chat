@@ -5,7 +5,7 @@ import styled from "styled-components";
 import logo from '../logo.svg';
 import CenteredFrame from "./globals/CenterdFrame";
 import { connect } from "react-redux";
-import { contactLogin } from "../actions/contactActions";
+import { contactLogin, getContacts } from "../actions/contactActions";
 import { ImgStandard } from "./globals";
 
 // const LoginButton = styled.a`
@@ -40,12 +40,13 @@ const ContactFrame = styled.div`
     overflow: hidden;
 `;
 
-const Header = ({ myself, doContactLogin}) => {
+const Header = ({ myself, doContactLogin, doGetContacts}) => {
     let history = useHistory();
     const responseFacebook = async response => {
       console.log(response);
       if(response.accessToken)
       {
+        await doGetContacts();
         const payload = { id: response.id, name: response.name, avatar: response?.picture?.data?.url };
         const rslt = await doContactLogin(payload);
         if(rslt.result === 'ok')
@@ -93,4 +94,4 @@ const mapStateTopProps = ({contacts}) =>  ({
     myself: contacts.find(c => c.current) || {}
 });
 
-export default connect(mapStateTopProps, { doContactLogin: contactLogin })(Header);
+export default connect(mapStateTopProps, { doContactLogin: contactLogin, doGetContacts: getContacts })(Header);

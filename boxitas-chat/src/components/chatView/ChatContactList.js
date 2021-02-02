@@ -78,7 +78,6 @@ return (
                 <Grid item>
                     <Grid container alignItems="center" spacing={2} style={{ paddingBottom: 8 }}>
                         <Grid item>
-                            {myself.name}
                             <ChatListTitle>Contact List</ChatListTitle>
                         </Grid>
                         <Grid item xs>

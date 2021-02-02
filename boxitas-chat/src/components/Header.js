@@ -39,6 +39,23 @@ const ContactFrame = styled.div`
     border-radius: 19px;
     overflow: hidden;
 `;
+const AvatarFrame = styled.div`
+    position: relative;
+`;
+const LogoutButton = styled.button`
+    height: 16px;
+    width: 16px;
+    font-size: 12px;
+    border-radius: 8px;
+    position: absolute;
+    background: #ef5366;
+    color: white;
+    border: none;
+    top: -10px;
+    right: -10px;
+    padding: 0px 0px 1px 1px;
+    cursor: pointer;
+`;
 
 const Header = ({ myself, doContactLogin, doGetContacts}) => {
     let history = useHistory();
@@ -73,9 +90,12 @@ const Header = ({ myself, doContactLogin, doGetContacts}) => {
                             <LoggedContact>{myself.name}</LoggedContact>
                         </Grid>
                         <Grid item>
-                            <ContactFrame>
-                                <ImgStandard src={myself.avatar} alt="logo" />
-                            </ContactFrame>
+                            <AvatarFrame>
+                                <ContactFrame>
+                                    <ImgStandard src={myself.avatar} alt="logo" />
+                                </ContactFrame>
+                                <LogoutButton onClick={()=> alert('kk')} title="Logout" >x</LogoutButton>
+                            </AvatarFrame>
                         </Grid>
                     </Grid>
                 ) :

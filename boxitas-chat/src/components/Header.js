@@ -7,6 +7,7 @@ import CenteredFrame from "./globals/CenterdFrame";
 import { connect } from "react-redux";
 import { contactLogin, contactLogout, getContacts } from "../actions/contactActions";
 import { ImgStandard } from "./globals";
+import { StylessButton } from "./globals/buttons";
 
 // const LoginButton = styled.a`
 //   color: white;
@@ -61,6 +62,7 @@ const LogoutButton = styled.button`
     }
 `;
 
+
 const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
     let history = useHistory();
     const responseFacebook = async response => {
@@ -80,11 +82,11 @@ const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
     <CenteredFrame>
         <Grid container alignItems="center" style={{ height: '100%' }}>
             <Grid item >
-                <a href="/">
+                <StylessButton onClick={() =>  history.push('/')}>
                     <LogoFrame>
                         <ImgStandard src={logo} alt="logo" />
                     </LogoFrame>
-                </a>
+                </StylessButton>
             </Grid>
             <Grid item xs />
             <Grid item>

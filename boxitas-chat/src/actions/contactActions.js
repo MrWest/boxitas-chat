@@ -116,7 +116,7 @@ export const contactLogin = contact => async dispatch => {
     console.log('contactLogin Action - Entering');
     const { filter } = jsonServer();
     try {
-      const messagestAPI = await filter('messages', `receiver=${myself.id}&wasViewed_ne=true`);
+      const messagestAPI = await filter('messages', `receiver=${myself.id}&wasViewed=false`);
       if (messagestAPI.status === 200) {
         dispatch({
           type: NOTIFY_MESSAGES,

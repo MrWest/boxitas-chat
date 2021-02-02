@@ -1,4 +1,4 @@
-import { SELECT_CONTACT, REGISTER_MESSAGE } from '../actions/types';
+import { SELECT_CONTACT, REGISTER_MESSAGE, MESSAGE_WAS_VIEWED } from '../actions/types';
 
 const selectedContactReducer = (state = {}, action)  => {
     switch (action.type) {
@@ -6,7 +6,9 @@ const selectedContactReducer = (state = {}, action)  => {
           return action.payload;
         case REGISTER_MESSAGE:
             return {...state, messages: [...state.messages || [], action.payload] };
-    
+        case MESSAGE_WAS_VIEWED: 
+            return {...state, messages: state.messages
+              .map(msg => msg.created !== action.payload.created ? msg : action.payload) };
         default:
           return state;
       }

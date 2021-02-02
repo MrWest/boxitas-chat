@@ -1,7 +1,7 @@
 import jsonServer from "../apis/jsonServer";
 import { errorAndLog, okAndLog } from "../helpers/utils";
 import {  SELECT_CONTACT, REGISTER_MESSAGE, CONTACT_LOGIN,
-   SUBSCRIBED_CONTACTS, CONTACT_LOGOUT } from "./types";
+   SUBSCRIBED_CONTACTS, CONTACT_LOGOUT, MESSAGE_WAS_VIEWED, NOTIFY_MESSAGES } from "./types";
 
 export const selectContact = (contact, myself) => async dispatch => {
   console.log('selectContact Action - Entering');
@@ -84,10 +84,50 @@ export const contactLogin = contact => async dispatch => {
           type: SUBSCRIBED_CONTACTS,
           payload: contactAPI.data
         });
-        return okAndLog('contactLogin', contactAPI.status, contactAPI.contact);
+        return okAndLog('contactLogin', contactAPI.status, contactAPI.data);
       }
       return errorAndLog('contactLogin', contactAPI.status, contactAPI.data);
     } catch (e) {
       return errorAndLog('contactLogin', e.status, e.data);
     }
   };
+
+
+  export const setMessageWasViewed = message => async dispatch => {
+    console.log('contactLogin Action - Entering');
+    const { patch } = jsonServer();
+    try {
+      const viewedMessage = {...message, wasViewed: true}
+      const messagestAPI =  await patch('message', viewedMessage);
+      if (messagestAPI.status === 200) {
+        dispatch({
+          type: MESSAGE_WAS_VIEWED,
+          payload: viewedMessage
+        });
+        return okAndLog('contactLogin', messagestAPI.status, messagestAPI.data);
+      }
+      return errorAndLog('contactLogin', messagestAPI.status, messagestAPI.data);
+    } catch (e) {
+      return errorAndLog('contactLogin', e.status, e.data);
+    }
+  };
+
+  export const notify = myself => async dispatch => {
+    console.log('contactLogin Action - Entering');
+    const { filter } = jsonServer();
+    try {
+      const messagestAPI = await filter('messages', `receiver=${myself.id}&wasViewed_ne=true`);
+      if (messagestAPI.status === 200) {
+        dispatch({
+          type: NOTIFY_MESSAGES,
+          payload: messagestAPI.data
+        });
+        return okAndLog('contactLogin', messagestAPI.status, messagestAPI.data);
+      }
+      return errorAndLog('contactLogin', messagestAPI.status, messagestAPI.data);
+    } catch (e) {
+      return errorAndLog('contactLogin', e.status, e.data);
+    }
+  };
+
+  

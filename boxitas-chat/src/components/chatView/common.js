@@ -5,6 +5,7 @@ height: 28px;
 width: 28px;
 border-radius: 14px;
 overflow: hidden;
+position: relative;
 `;
 
 

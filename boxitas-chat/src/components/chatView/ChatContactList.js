@@ -1,9 +1,10 @@
 import { Grid } from "@material-ui/core";
+import { MessageRounded } from "@material-ui/icons";
 import Pusher from 'pusher-js';
 import { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { getContacts, selectContact } from "../../actions/contactActions";
+import { getContacts, selectContact, notify } from "../../actions";
 import { ImgStandard } from "../globals";
 import { ContactSmallFrame } from "./common";
 
@@ -46,6 +47,14 @@ const OnlineDot = styled.div`
     border-radius: 8px;
     background: ${props => props.isOnline ? '#31a24c' : '#828282' };
 `;
+const NewMessage = styled(MessageRounded)`
+    font-size: 12px;
+    background: #31a24c;
+    color: white;
+    position: absolute;
+    top: -12px;
+    right: -12px;
+`
 
 const ContactItem =({ contact, onSelectContact }) => {
 
@@ -55,6 +64,7 @@ const ContactItem =({ contact, onSelectContact }) => {
                 <Grid item>
                     <ContactSmallFrame>
                         <ImgStandard src={contact.avatar} />
+                        {contact.hasNewMessages && <NewMessage />}
                     </ContactSmallFrame>
                 </Grid>
                 <Grid item xs>
@@ -68,7 +78,7 @@ const ContactItem =({ contact, onSelectContact }) => {
     );
 }
 
-const ChatContactList = ({contacts, myself, doSelectContact, doGetContacts}) => {
+const ChatContactList = ({contacts, myself, doSelectContact, doGetContacts, doNotify}) => {
 
     useEffect(() => {
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
@@ -79,7 +89,10 @@ const ChatContactList = ({contacts, myself, doSelectContact, doGetContacts}) => 
           channel.bind('user', () => {
             doGetContacts();
           });
-        // return () => pusher.unsubscribe('chat');
+          channel.bind('notify', () => {
+            doNotify(myself);
+          });
+          return () => pusher.unsubscribe('chat');
     }, []);
     
 return (
@@ -112,4 +125,5 @@ const mapStateTopProps = ({contacts}) =>  ({
      myself: contacts.find(c => c.current) || {}
     });
 
-export default connect(mapStateTopProps, { doSelectContact: selectContact, doGetContacts: getContacts })(ChatContactList);
+export default connect(mapStateTopProps, { doSelectContact: selectContact,
+     doGetContacts: getContacts, doNotify: notify })(ChatContactList);

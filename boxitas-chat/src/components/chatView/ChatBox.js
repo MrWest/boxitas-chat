@@ -1,9 +1,10 @@
 import { Button, Grid, TextField } from "@material-ui/core";
+import { Check } from "@material-ui/icons";
 import { connect } from "react-redux";
 import Pusher from 'pusher-js';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { registersSelectedContactMessage } from "../../actions/contactActions";
+import { registersSelectedContactMessage, setMessageWasViewed } from "../../actions/contactActions";
 import { ContactSmallFrame } from "./common";
 import { ImgStandard } from "../globals";
 import jsonServer from "../../apis/jsonServer";
@@ -40,6 +41,7 @@ const MessageBulb = styled.div`
     color: ${props => props.isSent ? '#1C1C1C' : 'white' };
     padding: 10px 24px;
     border-radius: 24px;
+    position: relative;
 `;
 
 const Message = styled(ChatListTitle)`
@@ -47,9 +49,18 @@ const Message = styled(ChatListTitle)`
     margin: 0px;
 `;
 
-const ChatMessages =({ message, isSent }) => {
-   const time = new Date(message.created);
+const CheckIcon = styled(Check)`
+    font-size: 12px;
+    background: #31a24c;
+    color: white;
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+`;
 
+const ChatMessages =({ message, isSent, onShown }) => {
+   const time = new Date(message.created);
+    if(!message.wasViewed) onShown(message);
     return (
         <div>
             <Grid justify="center">
@@ -66,6 +77,7 @@ const ChatMessages =({ message, isSent }) => {
                 <Grid item style={{ maxWidth: '70%' }}>
                     <MessageBulb isSent={isSent}>
                         <Message>{message.message}</Message>
+                        {message.wasViewed && <CheckIcon />}
                     </MessageBulb>
                 </Grid>
             </Grid>
@@ -74,7 +86,7 @@ const ChatMessages =({ message, isSent }) => {
     );
 }
 
-const ChatBox = ({ selectedContact, myself, registerMessage }) => {
+const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed }) => {
     const [outgoingText, setOutgoingText] = useState();
     
     useEffect(() => {
@@ -86,7 +98,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
           channel.bind('message', data => {
             registerMessage(data);
           });
-        // return () => pusher.unsubscribe('chat');
+         return () => pusher.unsubscribe('chat');
     }, []);
 
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
@@ -115,7 +127,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
                 </Grid>
                 <Grid item xs>
                     {selectedContact.id && messages?.map(message => (
-                       message.sender !== message.receiver && <ChatMessages message={message} isSent={message.sender === myself.id}/>
+                       message.sender !== message.receiver && <ChatMessages message={message} isSent={message.sender === myself.id} onShown={messageWasViewed} />
                     ))}
                 </Grid>
                 <Grid item>
@@ -146,4 +158,4 @@ const mapStateTopProps = ({selectedContact, contacts}) =>  ({
         myself: contacts.find(c => c.current) || { id: false, name: "someUser"}
     });
 
-export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage })(ChatBox);
+export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage, messageWasViewed: setMessageWasViewed })(ChatBox);

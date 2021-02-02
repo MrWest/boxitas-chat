@@ -93,7 +93,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
 
     const sendMessage = () => {
         const { post } = jsonServer();
-        setOutgoingText();
+        setOutgoingText('kkk');
         const payload = {
             created: Date.now(),
             sender: myself.id,
@@ -123,6 +123,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
                                 variant="outlined"
                                 multiline
                                 rows={3}
+                                disabled={!selectedContact.id}
                                 rowsMax={3} />
                          </ChatSendInputtContainer>
                      </Grid>
@@ -139,7 +140,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage }) => {
 };
 const mapStateTopProps = ({selectedContact, contacts}) =>  ({
         selectedContact,
-        myself: contacts.find(c => c.current) || { id: 1, name: "someUser"}
+        myself: contacts.find(c => c.current) || { id: false, name: "someUser"}
     });
 
 export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage })(ChatBox);

@@ -105,7 +105,7 @@ const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
                 ) :
             (<FacebookLogin
                 appId="831923634071922"
-                autoLoad={true}
+                autoLoad={false}
                 fields="name,email,picture"
                 callback={responseFacebook} />)
             }

@@ -13,7 +13,7 @@ export const selectContact = (contact, myself) => async dispatch => {
       const receivedMessagesAPI =  await filter('messages', `sender=${contact.id}& receiver=${myself.id}`);
       const sentMessagesAPI =  await filter('messages', `sender=${myself.id}& receiver=${contact.id}`);
 
-      const messages = [...receivedMessagesAPI.data, sentMessagesAPI.data ].sort((a,b) => a.created > b.created);
+      const messages = [...receivedMessagesAPI.data, ...sentMessagesAPI.data ].sort((a,b) => a.created > b.created);
 
       dispatch({ type: SELECT_CONTACT, payload: {...contact, messages} });
       return okAndLog('contactLogin', contactAPI.status, contact);

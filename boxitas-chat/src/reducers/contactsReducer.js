@@ -4,7 +4,7 @@ const contactsReducer = (state = [], action)  => {
     switch (action.type) {
         case SUBSCRIBED_CONTACTS:
           const myself = state.find(c => c.current);
-          return action.payload.map(contact => contact.id !== action.payload.id ? 
+          return action.payload.map(contact => contact.id !== myself.id ? 
             contact :  myself);
         case CONTACT_LOGIN:
           return [{...action.payload, current: true}, ...state.filter(contact => contact.id !== action.payload.id)];

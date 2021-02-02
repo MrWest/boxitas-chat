@@ -1,4 +1,5 @@
 import { Button } from "@material-ui/core";
+import { connect } from "react-redux";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import CenteredFrame from "./globals/CenterdFrame";
@@ -8,19 +9,24 @@ const Title = styled.h1`
  text-align: center;
 `;
 const ButtonContainer = styled.div`
-    padding: 56px;
+    display: flex;
+    justify-content: center;
 `;
 
-const Home = () => {
+const Home = ({ myself }) => {
     const location = useLocation();
     return (
     <CenteredFrame>
         <Title>You're Home</Title>
         <ButtonContainer>
-             <Button size="large" variant="contained" onClick={() => location.push('/chat')}>Let's Chat!!!</Button>
+             <Button size="large" variant="contained" color="primary" onClick={() => location.push('/chat')}>Let's Chat!!!</Button>
         </ButtonContainer>
     </CenteredFrame>
     );
 };
+const mapStateTopProps = ({contacts}) =>  ({
+    myself: contacts.find(c => c.current)
+   });
 
-export default Home;
+
+export default connect(mapStateTopProps)(Home);

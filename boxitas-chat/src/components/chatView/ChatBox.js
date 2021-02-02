@@ -111,7 +111,8 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
             sender: myself.id,
             senderAvatar: myself.avatar,
             receiver: selectedContact.id,
-            message: outgoingText
+            message: outgoingText,
+            wasViewed: false
           };
          
           post(`messages`, payload);

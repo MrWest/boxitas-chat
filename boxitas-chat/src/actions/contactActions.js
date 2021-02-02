@@ -34,20 +34,20 @@ export const contactLogin = contact => async dispatch => {
     const { post, filter, patch } = jsonServer();
      
     try {
-      
+      const loggedContact = {...contact, isOnline: true };
       let contactAPI =  await filter('users', `id=${contact.id}`);
       if(!contactAPI.data.length) 
-        contactAPI =  await post('users', contact);
-      else {
+        contactAPI =  await post('users', loggedContact);
+      else 
+        await patch(`users/${contact.id}`, loggedContact);
           
         dispatch({
           type: CONTACT_LOGIN,
-          payload: contact
+          payload: loggedContact
         });
-        await patch(`users/${contact.id}`, {...contact, isOnline: true });
-        return okAndLog('contactLogin', contactAPI.status, contact);
-      }
-      return errorAndLog('contactLogin', contactAPI.status, contact);
+        
+        return okAndLog('contactLogin', 200, contact);
+     
     } catch (e) {
       return errorAndLog('contactLogin', e.status, e.data);
     }

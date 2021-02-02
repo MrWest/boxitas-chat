@@ -80,7 +80,7 @@ const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
 
     return (
     <CenteredFrame>
-        <Grid container alignItems="center" style={{ height: '100%' }}>
+        <Grid container alignItems="center" style={{ height: '100%', marginBottom: 32 }}>
             <Grid item >
                 <StylessButton onClick={() =>  history.push('/')}>
                     <LogoFrame>

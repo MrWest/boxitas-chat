@@ -62,7 +62,7 @@ const ChatMessages =({ message, isSent }) => {
                     </ContactSmallFrame>
                 </Grid>
                 }
-                <Grid item xs={8}>
+                <Grid item >
                     <MessageBulb isSent={isSent}>
                         <Message>{message.message}</Message>
                     </MessageBulb>

@@ -37,6 +37,14 @@ const SendButton = styled(Button)`
 const ChatSendInputtContainer = styled.div`
     display: flex;
 `;
+
+const MessagesWrapper = styled.div`
+    height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 24px;
+    margin-bottom: 32px;
+`;
 const MessageBulb = styled.div`
     background:  ${props => props.isSent ? '#CCCCCC' : '#2851A3' };
     color: ${props => props.isSent ? '#1C1C1C' : 'white' };
@@ -72,10 +80,10 @@ const Timestamp = ({ message, previous }) => {
 };
 
 const ChatMessages =({ message, isSent, onShown, previous }) => {
-    if(!message.wasViewed) onShown(message);
+    if(!message.wasViewed && (!isSent || (message.sender === message.receiver))) onShown(message);
     return (
         <div>
-            <Grid justify="center">
+            <Grid container justify="center">
                 <Timestamp message={message} previous={previous} />
             </Grid>
             <Grid container spacing={2} justify={isSent? "flex-end" : "flex-start"} >
@@ -100,7 +108,8 @@ const ChatMessages =({ message, isSent, onShown, previous }) => {
 
 const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed }) => {
     const [outgoingText, setOutgoingText] = useState();
-    
+    const [elRef, setElRef] = useState();
+
     useEffect(() => {
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
             cluster: process.env.REACT_APP_PUSHER_CLUSTER,
@@ -108,9 +117,9 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
           });
           const channel = pusher.subscribe('chat');
           channel.bind('message', data => {
-            registerMessage(data);
+            if((selectedContact.id === data.sender && myself.id === data.receiver) ||
+            (myself.id === data.sender && selectedContact.id === data.receiver) ) registerMessage(data);
           });
-         return () => pusher.unsubscribe('chat');
     }, []);
 
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
@@ -133,17 +142,25 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
 
     const onKeyDown = ({ keyCode }) => keyCode === 13 && sendMessage();
 
+    useEffect(() => {
+        if (elRef) {
+          elRef.scrollTop = elRef.scrollHeight;
+        }
+      }, [selectedContact, elRef]);
+
      const { name, messages } = selectedContact;
     return (
         <Grid container direction="column" style={{ width: '100%', minHeight: '50vh' }}>
                 <Grid item>
-                 <ChatListTitle>Message history {name && `from ${name}`}</ChatListTitle>
+                 <ChatListTitle>Message history {name && `with ${name}`}</ChatListTitle>
                 </Grid>
                 <Grid item xs>
-                    {selectedContact.id && messages?.map((message, idx) => (
-                       message.sender !== message.receiver && <ChatMessages message={message} 
-                       isSent={message.sender === myself.id} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
-                    ))}
+                    <MessagesWrapper ref={setElRef}>
+                        {selectedContact.id && messages?.map((message, idx) => (
+                        <ChatMessages key={message.id} message={message} 
+                        isSent={message.sender === myself.id} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
+                        ))}
+                    </MessagesWrapper>
                 </Grid>
                 <Grid item>
                  <Grid container alignItems="center" spacing={1}>

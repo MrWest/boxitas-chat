@@ -26,9 +26,10 @@ const SearchInputContainer = styled.div`
     display: flex;
 `;
 const ContactItemShell = styled.div`
-    border-bottom: 1px solid #d4d9e2;
+    border-bottom: 1px solid ${props => props.selected ? '#3f51b5' : '#d4d9e2' };
     padding: 4px 0px;
-    background: #fafafa;
+    color: ${props => props.selected ? '#3f51b5' : 'inherit' };
+    cursor: pointer;
     &:hover {
         background: transparent;
         color: #3577d4;
@@ -59,10 +60,10 @@ const NewMessage = styled(MessageRounded)`
     right: -12px;
 `
 
-const ContactItem =({ contact, onSelectContact }) => {
+const ContactItem =({ contact, onSelectContact, selected }) => {
 
     return (
-        <ContactItemShell onClick={onSelectContact}>
+        <ContactItemShell onClick={onSelectContact} selected={selected}>
             <Grid container spacing={2} alignItems="center">
                 <Grid item>
                     <div style={{ position: "relative"}}>
@@ -84,7 +85,7 @@ const ContactItem =({ contact, onSelectContact }) => {
     );
 }
 
-const ChatContactList = ({contacts, myself, doSelectContact, doGetContacts, doNotify}) => {
+const ChatContactList = ({contacts, myself, selectedContact, doSelectContact, doGetContacts, doNotify}) => {
 
     useEffect(() => {
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
@@ -117,7 +118,8 @@ return (
                 </Grid>
                 <Grid item xs>
                     {contacts.map(contact => (
-                        <ContactItem key={contact.name} contact={contact} onSelectContact={() => doSelectContact(contact, myself)}/>
+                        <ContactItem key={contact.name} contact={contact}
+                         onSelectContact={() => doSelectContact(contact, myself)} selected={contact.id === selectedContact.id}/>
                     ))}
                 </Grid>
                 <Grid item></Grid>
@@ -126,9 +128,10 @@ return (
 );
 }
 
-const mapStateTopProps = ({contacts}) =>  ({
+const mapStateTopProps = ({contacts, selectedContact}) =>  ({
      contacts,
-     myself: contacts.find(c => c.current) || {}
+     myself: contacts.find(c => c.current) || {},
+     selectedContact
     });
 
 export default connect(mapStateTopProps, { doSelectContact: selectContact,

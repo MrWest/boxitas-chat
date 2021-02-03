@@ -27,24 +27,7 @@ export const selectContact = (contact, myself) => async dispatch => {
    
 };
 
-// export const updateMessagesStatus = (contact, myself) => async dispatch => {
-//   console.log('updateMessagesStatus Action - Entering');
-//   const { filter } = jsonServer();
-   
-//   try {
-//       const sentMessagesAPI =  await filter('messages', `sender=${myself.id}&receiver=${contact.id}`);
-//       if(sentMessagesAPI.status < 400)  {
-//       const messages = sentMessagesAPI.data;
 
-//       dispatch({ type: UPDATE_MESSAGE_STATUS, payload: messages });
-//       return okAndLog('updateMessagesStatus', sentMessagesAPI.status, sentMessagesAPI.data);
-//     }
-//     return errorAndLog('updateMessagesStatus', sentMessagesAPI.status, sentMessagesAPI.datda);
-//   } catch (e) {
-//     return errorAndLog('updateMessagesStatus', e.sentMessagesAPI, e.data);
-//   }
-   
-// };
 
 export const registersSelectedContactMessage = message =>  dispatch => {
   console.log('registersSelectedContactMessage Action - Entering');
@@ -132,17 +115,20 @@ export const contactLogin = contact => async dispatch => {
     }
   };
 
-  export const notify = (myself, theOther) => async dispatch => {
+  export const notify = myself => async dispatch => {
     console.log('notify Action - Entering');
     const { filter } = jsonServer();
     try {
+      // messages where I'm the receiver and they are not viewed
+      // to notify the contact list also on who are they comming from
       const messagesReceivedAPI = await filter('messages', `receiver=${myself.id}&wasViewed=false`);
       if (messagesReceivedAPI.status === 200) {
         dispatch({
           type: NOTIFY_MESSAGES,
           payload: messagesReceivedAPI.data
         });
-      
+      // messages where I'm the receiver and they are not viewed
+      // to update the status of my current messages by constrasting API new data with local data later or the reducer
       const messagesSentAPI = await filter('messages', `sender=${myself.id}&wasViewed=false`);
       if (messagesSentAPI.status === 200) {
         dispatch({

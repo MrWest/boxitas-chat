@@ -16,7 +16,7 @@ const Wrapper = styled.div`
     padding: 0px 5px;
   `}
 `;
-
+// This component is used to proper and common frame all the app views and/or sections
 const CenteredFrame = ({ children }) => (
     <Container>
         <Wrapper>

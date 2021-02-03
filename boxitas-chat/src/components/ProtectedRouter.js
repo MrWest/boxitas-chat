@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
+// This component redirects users when they're no authenticated 
 const ProtectedRoute = ({ component, currentUser }) => {
 
     

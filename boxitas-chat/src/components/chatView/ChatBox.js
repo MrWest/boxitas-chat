@@ -95,6 +95,7 @@ const Timestamp = ({ message, previous }) => {
 };
 
 const ChatMessages =({ message, isSent, onShown, previous }) => {
+    // if it is a recieved message thats not viewed -> set to viewed
     if((!message.wasViewed && !isSent) || 
     (!message.wasViewed && message.sender === message.receiver)) onShown(message);
     return (
@@ -125,7 +126,8 @@ const ChatMessages =({ message, isSent, onShown, previous }) => {
 const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed }) => {
     const [outgoingText, setOutgoingText] = useState();
     const [elRef, setElRef] = useState();
-
+    // when the component is mounted creates the Pusher object and subscribe to the channels
+    // chat channel  binded  to 'message' to watch for new messages on the current chat
     useEffect(() => {
         if(selectedContact.id){ 
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
@@ -150,6 +152,8 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
 
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
 
+    // just a simple post for a new message the API will trigger the notification back.
+    // therefore we dont need to handle any global or local state in this step
     const sendMessage = () => {
         const { post } = jsonServer();
         setOutgoingText('');
@@ -168,6 +172,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
 
     const onKeyDown = ({ keyCode }) => keyCode === 13 && sendMessage();
 
+    // scroll down whenever the selected contact changes or receives a new message
     useEffect(() => {
         if (elRef) {
           elRef.scrollTop = elRef.scrollHeight;
@@ -192,6 +197,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                 <Grid item>
                  <Grid container alignItems="center" spacing={1}>
                      <Grid item xs>
+                         {/* disabled on no selected contact */}
                          <ChatSendInputtContainer>
                              <ChatSendInput value={outgoingText} onChange={onTextChanged} onKeyUp={onKeyDown}
                                 variant="outlined"
@@ -202,6 +208,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                          </ChatSendInputtContainer>
                      </Grid>
                      <Grid item>
+                         {/* disabled on no text for sending */}
                          <SendButton variant="contained" color="primary" disabled={!outgoingText} onClick={sendMessage}>
                              Send
                          </SendButton>

@@ -18,6 +18,8 @@ const Home = ({ currentUser }) => {
     return (
     <CenteredFrame>
         <Title>You're Home</Title>
+        {/* This button is intended to redirect users 
+        back to chat view. It only appears when the user is online */}
         {currentUser.id && <ButtonContainer>
                         <Button size="large" variant="contained" color="primary" onClick={() => history.push('/chat')}>Let's Chat!!!</Button>
                     </ButtonContainer>}

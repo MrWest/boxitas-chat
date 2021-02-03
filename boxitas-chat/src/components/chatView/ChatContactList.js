@@ -126,6 +126,9 @@ const ContactItem =({ contact, onSelectContact, selected }) => {
 
 const ChatContactList = ({contacts, currentUser, selectedContact, doSelectContact, doGetContacts, doNotify}) => {
 
+    // when the component is mounted creates the Pusher object and subscribe to the channels
+    // chat channel  binded  to 'user' to watch for new contacts
+    // chat channel  binded  to 'notify' to watch for new messages
     useEffect(() => {
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
             cluster: process.env.REACT_APP_PUSHER_CLUSTER,

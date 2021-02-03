@@ -9,23 +9,6 @@ import { contactLogin, contactLogout, getContacts } from "../actions/contactActi
 import { ImgStandard } from "./globals";
 import { StylessButton } from "./globals/buttons";
 
-// const LoginButton = styled.a`
-//   color: white;
-//   font-family: Roboto;
-//   font-size: 16px;
-//   padding: 6px 32px;
-//   border: 2px solid white;
-//   border-radius: 12px;
-//   background: #3577d4;
-//   &:hover {
-//     background: transparent;
-//     color: #3577d4;
-//     font-weight: bold;
-//     cursor: pointer;
-//     border: 2px solid #3577d4;
-//   }
-// `
-
 const LoggedContact = styled.p`
     font-size: 18px;
     margin: 0px;
@@ -65,6 +48,8 @@ const LogoutButton = styled.button`
 
 const Header = ({ currentUser, doContactLogin, doGetContacts, doContactLogout}) => {
     let history = useHistory();
+
+    // Handle facebook callback response to use it to log in and create (if neccessary) out chat contacts 
     const responseFacebook = async response => {
       console.log(response);
       if(response.accessToken)

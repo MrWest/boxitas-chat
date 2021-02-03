@@ -62,7 +62,7 @@ export const contactLogin = contact => async dispatch => {
       if(!contactAPI.data.length) 
         contactAPI =  await post('users', loggedContact);
       else 
-        await patch(`users/${contact.id}`, loggedContact);
+        await patch(`users/${contact.id}`, {isOnline: true});
           
         dispatch({
           type: CONTACT_LOGIN,
@@ -81,8 +81,8 @@ export const contactLogin = contact => async dispatch => {
     const { patch } = jsonServer();
      
     try {
-      const loggedoutContact = {...contact, isOnline: false, current: false };
-      await patch(`users/${contact.id}`, loggedoutContact);
+      const loggedoutContact = {...contact, isOnline: false };
+      await patch(`users/${contact.id}`, {isOnline: false});
      
           
         dispatch({

@@ -6,7 +6,7 @@ import ChatContactList from "./ChatContactList";
 
 const ChatHome = () => (
     <CenteredFrame>
-        <Grid container spacing={8}>
+        <Grid container spacing={2}>
             <Grid item xs={3}>
              <ChatContactList />
             </Grid>

@@ -9,11 +9,16 @@ import { registersSelectedContactMessage, setMessageWasViewed } from "../../acti
 import { ContactSmallFrame } from "./common";
 import { ImgStandard } from "../globals";
 import jsonServer from "../../apis/jsonServer";
+import { respondTo } from "../../helpers/respondTo";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
     margin: 0px;
     margin-right: 32px;
+    margin-bottom: 20px;
+    ${respondTo.sm`
+    font-size: 12px;
+    `}
 `;
 const TimeText = styled(ChatListTitle)`
     font-size: 12px;
@@ -33,6 +38,9 @@ const SendButton = styled(Button)`
     height: 92px;
     width: 142px;
     font-size: 32px;
+    ${respondTo.sm`
+    width: 32px;
+    `}
 `
 const ChatSendInputtContainer = styled.div`
     display: flex;
@@ -68,6 +76,13 @@ const CheckIcon = styled(Check)`
     border-radius: 8px;
     height: 10px !important;
     width: 10px !important;
+`;
+
+const ChatBoxShell = styled.div`
+        padding-left: 56px;
+        ${respondTo.sm`
+        padding-left: 16px;
+        `}
 `;
 
 const timeDiff = (date1, date2) => Math.abs(date2.getTime() - date1.getTime());
@@ -150,6 +165,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
 
      const { name, messages } = selectedContact;
     return (
+        <ChatBoxShell>
         <Grid container direction="column" style={{ width: '100%', minHeight: '50vh' }}>
                 <Grid item>
                  <ChatListTitle>Message history {name && `with ${name}`}</ChatListTitle>
@@ -182,6 +198,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
                  </Grid>
                 </Grid>
          </Grid>
+         </ChatBoxShell>
 
     );
 };

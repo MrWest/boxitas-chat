@@ -7,10 +7,14 @@ import styled from "styled-components";
 import { getContacts, selectContact, notify } from "../../actions";
 import { ImgStandard } from "../globals";
 import { ContactSmallFrame } from "./common";
+import { respondTo } from "../../helpers/respondTo";
 
 const ChatListTitle = styled.p`
     font-size: 18px;
     margin: 0px;
+    ${respondTo.sm`
+     display: none;
+  `}
 `;
 const ChatSearchInput = styled.input`
     height: 32px;
@@ -38,15 +42,23 @@ const ContactItemShell = styled.div`
       }
 `;
 
-const ContactName = styled(ChatListTitle)`
+const ContactName = styled.p`
     font-size: 16;
     margin: 0px;
+    ${respondTo.sm`
+    font-size: 12px;
+ `}
 `;
 const OnlineDot = styled.div`
     height: 16px;
     width: 16px;
     border-radius: 8px;
     background: ${props => props.isOnline ? '#31a24c' : '#828282' };
+    ${respondTo.sm`
+    height: 8px;
+    width: 8px;
+    border-radius: 4px;
+    `}
 `;
 const NewMessage = styled(MessageRounded)`
     background: #31a24c;
@@ -60,26 +72,47 @@ const NewMessage = styled(MessageRounded)`
     right: -12px;
 `
 
+const CustomGrid = styled(Grid)`
+    ${respondTo.sm`
+    padding: 0px !important;
+    `}
+`;
+
+const GridOnMobile = styled(Grid)`
+    display: none;
+    ${respondTo.sm`
+    display: block;
+    `}
+`;
+
+const GridNotMobile = styled(Grid)`
+    ${respondTo.sm`
+    display: none;
+    `}
+`;
+
 const ContactItem =({ contact, onSelectContact, selected }) => {
 
     return (
         <ContactItemShell onClick={onSelectContact} selected={selected}>
             <Grid container spacing={2} alignItems="center">
-                <Grid item>
+                <Grid item md="auto" sm>
                     <div style={{ position: "relative"}}>
                         <ContactSmallFrame>
                             <ImgStandard src={contact.avatar} />
-                        
                         </ContactSmallFrame>
                         {contact.hasNewMessages && <NewMessage />}
                     </div>
                 </Grid>
+                <GridOnMobile item>
+                    <OnlineDot isOnline={contact.isOnline} />
+                </GridOnMobile>
                 <Grid item xs>
                     <ContactName>{contact.name}</ContactName>
                 </Grid>
-                <Grid item>
+                <GridNotMobile item>
                     <OnlineDot isOnline={contact.isOnline} />
-                </Grid>
+                </GridNotMobile>
             </Grid>
         </ContactItemShell>
     );
@@ -106,9 +139,9 @@ return (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
                 <Grid item>
                     <Grid container alignItems="center" spacing={2} style={{ paddingBottom: 8 }}>
-                        <Grid item>
+                        <CustomGrid item >
                             <ChatListTitle>Contact List</ChatListTitle>
-                        </Grid>
+                        </CustomGrid>
                         <Grid item xs>
                             <SearchInputContainer>
                                 <ChatSearchInput />

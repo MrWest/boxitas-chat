@@ -25,6 +25,12 @@ const ChatSearchInput = styled.input`
     border: 1px solid #d4d9e2;
     outline: none;
     position: relative;
+    ${respondTo.sm`
+        height: 24px;
+        padding: 0px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+  `}
 `;
 const SearchInputContainer = styled.div`
     display: flex;
@@ -132,7 +138,6 @@ const ChatContactList = ({contacts, currentUser, selectedContact, doSelectContac
           channel.bind('notify', () => {
             doNotify(currentUser);
           });
-          alert(selectedContact.name);
           return () => pusher.unsubscribe('chat');
         
     }, []);
@@ -152,10 +157,9 @@ return (
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    {contacts.map(contact => (
-                        <ContactItem key={contact.name} contact={contact}
+                    {contacts.map(contact => currentUser.id !== contact.id && <ContactItem key={contact.name} contact={contact}
                          onSelectContact={() => doSelectContact(contact, currentUser)} selected={contact.id === selectedContact.id}/>
-                    ))}
+                    )}
                 </Grid>
                 <Grid item></Grid>
          </Grid>

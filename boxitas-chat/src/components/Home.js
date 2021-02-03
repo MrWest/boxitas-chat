@@ -13,19 +13,19 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-const Home = ({ myself }) => {
+const Home = ({ currentUser }) => {
     const history = useHistory();
     return (
     <CenteredFrame>
         <Title>You're Home</Title>
-        {myself && <ButtonContainer>
+        {currentUser.id && <ButtonContainer>
                         <Button size="large" variant="contained" color="primary" onClick={() => history.push('/chat')}>Let's Chat!!!</Button>
                     </ButtonContainer>}
     </CenteredFrame>
     );
 };
-const mapStateTopProps = ({contacts}) =>  ({
-    myself: contacts.find(c => c.current)
+const mapStateTopProps = ({ currentUser}) =>  ({
+    currentUser
    });
 
 

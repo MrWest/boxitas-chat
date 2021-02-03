@@ -63,7 +63,7 @@ const LogoutButton = styled.button`
 `;
 
 
-const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
+const Header = ({ currentUser, doContactLogin, doGetContacts, doContactLogout}) => {
     let history = useHistory();
     const responseFacebook = async response => {
       console.log(response);
@@ -90,17 +90,17 @@ const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
             </Grid>
             <Grid item xs />
             <Grid item>
-                {myself.id ? (
+                {currentUser.id ? (
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs>
-                            <LoggedContact>{myself.name}</LoggedContact>
+                            <LoggedContact>{currentUser.name}</LoggedContact>
                         </Grid>
                         <Grid item>
                             <AvatarFrame>
                                 <ContactFrame>
-                                    <ImgStandard src={myself.avatar} alt="logo" />
+                                    <ImgStandard src={currentUser.avatar} alt="logo" />
                                 </ContactFrame>
-                                <LogoutButton onClick={()=> doContactLogout(myself)} title="Logout" >x</LogoutButton>
+                                <LogoutButton onClick={()=> doContactLogout(currentUser)} title="Logout" >x</LogoutButton>
                             </AvatarFrame>
                         </Grid>
                     </Grid>
@@ -117,8 +117,8 @@ const Header = ({ myself, doContactLogin, doGetContacts, doContactLogout}) => {
     </CenteredFrame>
     );
 };
-const mapStateTopProps = ({contacts}) =>  ({
-    myself: contacts.find(c => c.current) || {}
+const mapStateTopProps = ({currentUser}) =>  ({
+    currentUser
 });
 
 export default connect(mapStateTopProps, { doContactLogin: contactLogin, 

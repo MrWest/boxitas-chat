@@ -5,9 +5,9 @@ const selectedContactReducer = (state = { messages: [] }, action)  => {
         case SELECT_CONTACT:
           return action.payload;
         case REGISTER_MESSAGE:
-            return state.id ? {...state, 
+            return {...state, 
               messages: state.messages.find(msg => msg.id === action.payload.id) ? [...state.messages] :
-               [...state.messages, action.payload] } : {};
+               [...state.messages, action.payload] };
         case UPDATE_MESSAGES_STATUS: 
             return {...state, messages: state.messages
               .map(msg => {

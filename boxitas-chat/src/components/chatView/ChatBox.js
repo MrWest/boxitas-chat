@@ -22,7 +22,7 @@ const ChatListTitle = styled.p`
 `;
 const TimeText = styled(ChatListTitle)`
     font-size: 12px;
-    margin: 24px 0px 8px 0px;
+    margin: 24px 0px 6px 0px;
     color: #828282;
     text-align: center;
 `;
@@ -95,9 +95,10 @@ const Timestamp = ({ message, previous }) => {
 };
 
 const ChatMessages =({ message, isSent, onShown, previous }) => {
-    if(!message.wasViewed && (!isSent || (message.sender === message.receiver))) onShown(message);
+    if((!message.wasViewed && !isSent) || 
+    (!message.wasViewed && message.sender === message.receiver)) onShown(message);
     return (
-        <div>
+        <div style={{ marginBottom: 4 }}>
             <Grid container justify="center">
                 <Timestamp message={message} previous={previous} />
             </Grid>
@@ -121,21 +122,31 @@ const ChatMessages =({ message, isSent, onShown, previous }) => {
     );
 }
 
-const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed }) => {
+const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed }) => {
     const [outgoingText, setOutgoingText] = useState();
     const [elRef, setElRef] = useState();
 
     useEffect(() => {
+        if(selectedContact.id){ 
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
             cluster: process.env.REACT_APP_PUSHER_CLUSTER,
             forceTLS: true
           });
           const channel = pusher.subscribe('chat');
           channel.bind('message', data => {
-            if((selectedContact.id === data.sender && myself.id === data.receiver) ||
-            (myself.id === data.sender && selectedContact.id === data.receiver) ) registerMessage(data);
+            //   console.log('Y', selectedContact);
+            //   const a = ((selectedContact.id === data.sender) && (currentUser.id === data.receiver));
+            //   console.log('a-  ', selectedContact.id,  ' === ', data.sender, '  &&  ', currentUser.id, ' === ', data.receiver , data.message) 
+              
+            //   const b = ((currentUser.id === data.sender) && (selectedContact.id === data.receiver));
+            //   console.log('b-  ', currentUser.id,  ' === ', data.sender, '  &&  ', selectedContact.id, ' === ', data.receiver, data.message )
+            //   console.log('shit', a , b);
+            if(((selectedContact.id === data.sender) && (currentUser.id === data.receiver)) ||
+            ((currentUser.id === data.sender) && (selectedContact.id === data.receiver)) ) 
+            registerMessage(data);
           });
-    }, []);
+        }
+    }, [selectedContact]);
 
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
 
@@ -145,8 +156,8 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
         const payload = {
             id: Date.now(),
             created: Date.now(),
-            sender: myself.id,
-            senderAvatar: myself.avatar,
+            sender: currentUser.id,
+            senderAvatar: currentUser.avatar,
             receiver: selectedContact.id,
             message: outgoingText,
             wasViewed: false
@@ -174,7 +185,7 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
                     <MessagesWrapper ref={setElRef}>
                         {selectedContact.id && messages?.map((message, idx) => (
                         <ChatMessages key={message.id} message={message} 
-                        isSent={message.sender === myself.id} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
+                        isSent={message.sender === currentUser.id} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
                         ))}
                     </MessagesWrapper>
                 </Grid>
@@ -202,9 +213,9 @@ const ChatBox = ({ selectedContact, myself, registerMessage, messageWasViewed })
 
     );
 };
-const mapStateTopProps = ({selectedContact, contacts}) =>  ({
+const mapStateTopProps = ({selectedContact, currentUser}) =>  ({
         selectedContact,
-        myself: contacts.find(c => c.current) || { id: false, name: "someUser"}
+        currentUser
     });
 
 export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage, messageWasViewed: setMessageWasViewed })(ChatBox);

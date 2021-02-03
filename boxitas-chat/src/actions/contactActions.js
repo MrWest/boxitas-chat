@@ -14,8 +14,8 @@ export const selectContact = (contact, myself) => async dispatch => {
       const receivedMessagesAPI =  await filter('messages', `sender=${contact.id}&receiver=${myself.id}`);
       const sentMessagesAPI =  await filter('messages', `sender=${myself.id}&receiver=${contact.id}`);
 
-      const messages = [...receivedMessagesAPI.data, ...sentMessagesAPI.data ];
-      messages.sort((a,b) => a.created > b.created);
+      let messages = [...receivedMessagesAPI.data, ...sentMessagesAPI.data ];
+      messages = messages.sort((a,b) => a.created - b.created);
 
       dispatch({ type: SELECT_CONTACT, payload: {...contact, messages} });
       return okAndLog('selectContact', contactAPI.status, contact);
@@ -132,7 +132,7 @@ export const contactLogin = contact => async dispatch => {
     }
   };
 
-  export const notify = myself => async dispatch => {
+  export const notify = (myself, theOther) => async dispatch => {
     console.log('notify Action - Entering');
     const { filter } = jsonServer();
     try {

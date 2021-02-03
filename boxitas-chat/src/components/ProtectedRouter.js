@@ -2,11 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ component, myself }) => {
+const ProtectedRoute = ({ component, currentUser }) => {
 
     
         const Component = component;
-        const isAuthenticated = !!myself;
+        const isAuthenticated = !!currentUser.id;
        
         return isAuthenticated ? (
             <Component />
@@ -15,7 +15,7 @@ const ProtectedRoute = ({ component, myself }) => {
         );
  
 }
-const mapStateTopProps = ({contacts}) =>  ({
-    myself: contacts.find(c => c.current)
+const mapStateTopProps = ({currentUser}) =>  ({
+    currentUser
    });
 export default connect(mapStateTopProps)(ProtectedRoute);

@@ -11,7 +11,7 @@ import { saveState, loadState } from './helpers/LocalStorage';
 
 const initialState = loadState();
 
-export const store  = createStore(reducers, initialState, applyMiddleware(thunk));
+export const store  = createStore(reducers, initialState, applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 store.subscribe(

@@ -160,7 +160,7 @@ return (
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    {contacts.map(contact => currentUser.id !== contact.id && <ContactItem key={contact.name} contact={contact}
+                    {contacts.map(contact => <ContactItem key={contact.name} contact={contact}
                          onSelectContact={() => doSelectContact(contact, currentUser)} selected={contact.id === selectedContact.id}/>
                     )}
                 </Grid>

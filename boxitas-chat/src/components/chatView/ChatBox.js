@@ -129,25 +129,19 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
     // when the component is mounted creates the Pusher object and subscribe to the channels
     // chat channel  binded  to 'message' to watch for new messages on the current chat
     useEffect(() => {
-        if(selectedContact.id){ 
         const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
             cluster: process.env.REACT_APP_PUSHER_CLUSTER,
             forceTLS: true
           });
+          pusher.unsubscribe('chat'); // clean up the previuos channel subsccription if any
           const channel = pusher.subscribe('chat');
           channel.bind('message', data => {
-            //   console.log('Y', selectedContact);
-            //   const a = ((selectedContact.id === data.sender) && (currentUser.id === data.receiver));
-            //   console.log('a-  ', selectedContact.id,  ' === ', data.sender, '  &&  ', currentUser.id, ' === ', data.receiver , data.message) 
-              
-            //   const b = ((currentUser.id === data.sender) && (selectedContact.id === data.receiver));
-            //   console.log('b-  ', currentUser.id,  ' === ', data.sender, '  &&  ', selectedContact.id, ' === ', data.receiver, data.message )
-            //   console.log('shit', a , b);
             if(((selectedContact.id === data.sender) && (currentUser.id === data.receiver)) ||
             ((currentUser.id === data.sender) && (selectedContact.id === data.receiver)) ) 
             registerMessage(data);
           });
-        }
+       
+        return () => pusher.unsubscribe('chat');
     }, [selectedContact]);
 
     const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
@@ -190,7 +184,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                     <MessagesWrapper ref={setElRef}>
                         {selectedContact.id && messages?.map((message, idx) => (
                         <ChatMessages key={message.id} message={message} 
-                        isSent={message.sender === currentUser.id} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
+                        isSent={message.sender === currentUser.id && !(message.id === messages[idx + 1]?.id)} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
                         ))}
                     </MessagesWrapper>
                 </Grid>

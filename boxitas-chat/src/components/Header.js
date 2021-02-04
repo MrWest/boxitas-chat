@@ -54,9 +54,9 @@ const Header = ({ currentUser, doContactLogin, doGetContacts, doContactLogout}) 
       console.log(response);
       if(response.accessToken)
       {
-        await doGetContacts();
         const payload = { id: response.id, name: response.name, avatar: response?.picture?.data?.url };
         const rslt = await doContactLogin(payload);
+        await doGetContacts();
         if(rslt.result === 'ok')
           history.push('/chat');
       }

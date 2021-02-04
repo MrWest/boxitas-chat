@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import { MessageRounded } from "@material-ui/icons";
 import Pusher from 'pusher-js';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getContacts, selectContact, notify } from "../../actions";
@@ -125,7 +125,7 @@ const ContactItem =({ contact, onSelectContact, selected }) => {
 }
 
 const ChatContactList = ({contacts, currentUser, selectedContact, doSelectContact, doGetContacts, doNotify}) => {
-
+    const [search, setSearch] = useState('');
     // when the component is mounted creates the Pusher object and subscribe to the channels
     // chat channel  binded  to 'user' to watch for new contacts
     // chat channel  binded  to 'notify' to watch for new messages
@@ -144,6 +144,8 @@ const ChatContactList = ({contacts, currentUser, selectedContact, doSelectContac
           return () => pusher.unsubscribe('chat');
         
     }, []);
+
+    const onTextChanged = ({ target: { value }}) => setSearch(value);
     
 return (
         <Grid container direction="column" style={{ minHeight: '50vh' }}>
@@ -154,13 +156,14 @@ return (
                         </CustomGrid>
                         <Grid item xs>
                             <SearchInputContainer>
-                                <ChatSearchInput />
+                                <ChatSearchInput onChange={onTextChanged}/>
                             </SearchInputContainer>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    {contacts.map(contact => <ContactItem key={contact.name} contact={contact}
+                    {contacts.map(contact => contact.name?.toLowerCase()
+                    .includes(search.toLowerCase()) && <ContactItem key={contact.name} contact={contact}
                          onSelectContact={() => doSelectContact(contact, currentUser)} selected={contact.id === selectedContact.id}/>
                     )}
                 </Grid>

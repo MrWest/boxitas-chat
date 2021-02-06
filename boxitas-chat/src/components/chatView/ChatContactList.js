@@ -97,6 +97,12 @@ const GridNotMobile = styled(Grid)`
     `}
 `;
 
+const ContactsWrapper = styled.div`
+    height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+`;
+
 const ContactItem =({ contact, onSelectContact, selected }) => {
 
     return (
@@ -162,10 +168,12 @@ return (
                     </Grid>
                 </Grid>
                 <Grid item xs>
-                    {contacts.map(contact => contact.name?.toLowerCase()
-                    .includes(search.toLowerCase()) && <ContactItem key={contact.name} contact={contact}
-                         onSelectContact={() => doSelectContact(contact, currentUser)} selected={contact.id === selectedContact.id}/>
-                    )}
+                    <ContactsWrapper>
+                        {contacts.map(contact => contact.name?.toLowerCase()
+                        .includes(search.toLowerCase()) && <ContactItem key={contact.name} contact={contact}
+                            onSelectContact={() => doSelectContact(contact, currentUser)} selected={contact.id === selectedContact.id}/>
+                        )}
+                    </ContactsWrapper>
                 </Grid>
                 <Grid item></Grid>
          </Grid>

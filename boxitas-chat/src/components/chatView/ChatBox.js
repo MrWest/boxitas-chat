@@ -1,6 +1,7 @@
 import { Button, Grid, TextField } from "@material-ui/core";
 import { Check } from "@material-ui/icons";
 import { connect } from "react-redux";
+import _ from 'lodash';
 import Pusher from 'pusher-js';
 import moment from 'moment';
 import styled from "styled-components";
@@ -28,7 +29,7 @@ const TimeText = styled(ChatListTitle)`
 `;
 const IsTypingText = styled.p`
     font-size: 12px;
-    margin: 16px 0px;
+    margin: 16px 0px 8px 0px;
     color: #828282;
     text-align: center;
 `;
@@ -44,6 +45,12 @@ const SendButton = styled(Button)`
     height: 92px;
     width: 142px;
     font-size: 32px;
+    ${respondTo.sm`
+    width: 32px;
+    `}
+`
+const SpacingFrame = styled(Button)`
+    width: 142px;
     ${respondTo.sm`
     width: 32px;
     `}
@@ -134,13 +141,16 @@ const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
     forceTLS: true
   });
 
+  var debounced = _.debounce((currentUser, selectedContact) => {
+    const { post } = jsonServer();
+    post(`events`, { who: currentUser.id, to: selectedContact.id });
+}, 1000);
+
 const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed, isTyping }) => {
     const [outgoingText, setOutgoingText] = useState();
     const [elRef, setElRef] = useState();
 
-    // reset "Is typing..." message
-    setInterval(() => isTyping(false), 3000);
-
+   
     // when the component is mounted creates the Pusher object and subscribe to the channels
     // chat channel  binded  to 'message' to watch for new messages on the current chat
     useEffect(() => {
@@ -154,22 +164,30 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
           });
 
           channel.bind('isTyping', data => {
-            if((selectedContact.id === data.who) && (currentUser.id === data.to)) 
-            isTyping(true);
+            if(!selectedContact.isTyping && (selectedContact.id === data.who) && (currentUser.id === data.to)) {
+                isTyping(true);
+
+                // reset "Is typing..." message after 3 seconds
+                setTimeout(() => isTyping(false), 3000);  
+            }
           });
        
         return () => pusher.unsubscribe('chat');
     }, [selectedContact]);
 
+   
+
     const onTextChanged = ({ target: { value }}) => {
         setOutgoingText(value);
-        pusher.trigger('chat', 'isTyping', { who: currentUser.id, to: selectedContact.id });
+
+        // A debounced func to ensure `post` is invoked once after 3 second of debounced calls.
+        debounced(currentUser, selectedContact);
     };
 
     // just a simple post for a new message the API will trigger the notification back.
     // therefore we dont need to handle any global or local state in this step
     const sendMessage = () => {
-        const { post } = jsonServer();
+        
         setOutgoingText('');
         const payload = {
             id: Date.now(),
@@ -180,7 +198,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
             message: outgoingText,
             wasViewed: false
           };
-         
+          const { post } = jsonServer();
           post(`messages`, payload);
     };
 
@@ -207,9 +225,14 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                         isSent={message.sender === currentUser.id && !(message.id === messages[idx + 1]?.id)} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
                         ))}
                     </MessagesWrapper>
-                    {selectedContact.isTyping && <IsTypingText>Is typing...</IsTypingText>}
                 </Grid>
                 <Grid item>
+                <Grid container alignItems="center" spacing={1}>
+                     <Grid item xs>
+                        {selectedContact.isTyping && <IsTypingText>{`${selectedContact.name} is typing...`}</IsTypingText>}
+                    </Grid>
+                    <Grid item ><SpacingFrame /></Grid>
+                 </Grid>
                  <Grid container alignItems="center" spacing={1}>
                      <Grid item xs>
                          {/* disabled on no selected contact */}

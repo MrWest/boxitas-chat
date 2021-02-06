@@ -1,4 +1,4 @@
-import { SELECT_CONTACT, REGISTER_MESSAGE, UPDATE_MESSAGES_STATUS } from '../actions/types';
+import { SELECT_CONTACT, REGISTER_MESSAGE, UPDATE_MESSAGES_STATUS, SET_IS_TYPING } from '../actions/types';
 
 const selectedContactReducer = (state = { messages: [] }, action)  => {
     switch (action.type) {
@@ -13,6 +13,8 @@ const selectedContactReducer = (state = { messages: [] }, action)  => {
               .map(msg => {
                 const msj = action.payload.find(m => !msg.wasViewed && m.id === msg.id);
                 return msj ||  {...msg, wasViewed: true }}) };
+        case SET_IS_TYPING:
+                return {...state, isTyping: action.payload};
         default:
           return state;
       }

@@ -5,7 +5,7 @@ import Pusher from 'pusher-js';
 import moment from 'moment';
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { registersSelectedContactMessage, setMessageWasViewed } from "../../actions/contactActions";
+import { registersSelectedContactMessage, setMessageWasViewed, setIsTyping } from "../../actions/contactActions";
 import { ContactSmallFrame } from "./common";
 import { ImgStandard } from "../globals";
 import jsonServer from "../../apis/jsonServer";
@@ -23,6 +23,12 @@ const ChatListTitle = styled.p`
 const TimeText = styled(ChatListTitle)`
     font-size: 12px;
     margin: 24px 0px 6px 0px;
+    color: #828282;
+    text-align: center;
+`;
+const IsTypingText = styled.p`
+    font-size: 12px;
+    margin: 16px 0px;
     color: #828282;
     text-align: center;
 `;
@@ -123,16 +129,22 @@ const ChatMessages =({ message, isSent, onShown, previous }) => {
     );
 }
 
-const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed }) => {
+const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+    cluster: process.env.REACT_APP_PUSHER_CLUSTER,
+    forceTLS: true
+  });
+
+const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed, isTyping }) => {
     const [outgoingText, setOutgoingText] = useState();
     const [elRef, setElRef] = useState();
+
+    // reset "Is typing..." message
+    setInterval(() => isTyping(false), 3000);
+
     // when the component is mounted creates the Pusher object and subscribe to the channels
     // chat channel  binded  to 'message' to watch for new messages on the current chat
     useEffect(() => {
-        const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
-            cluster: process.env.REACT_APP_PUSHER_CLUSTER,
-            forceTLS: true
-          });
+        
           pusher.unsubscribe('chat'); // clean up the previuos channel subsccription if any
           const channel = pusher.subscribe('chat');
           channel.bind('message', data => {
@@ -140,11 +152,19 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
             ((currentUser.id === data.sender) && (selectedContact.id === data.receiver)) ) 
             registerMessage(data);
           });
+
+          channel.bind('isTyping', data => {
+            if((selectedContact.id === data.who) && (currentUser.id === data.to)) 
+            isTyping(true);
+          });
        
         return () => pusher.unsubscribe('chat');
     }, [selectedContact]);
 
-    const onTextChanged = ({ target: { value }}) => setOutgoingText(value);
+    const onTextChanged = ({ target: { value }}) => {
+        setOutgoingText(value);
+        pusher.trigger('chat', 'isTyping', { who: currentUser.id, to: selectedContact.id });
+    };
 
     // just a simple post for a new message the API will trigger the notification back.
     // therefore we dont need to handle any global or local state in this step
@@ -187,6 +207,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                         isSent={message.sender === currentUser.id && !(message.id === messages[idx + 1]?.id)} onShown={messageWasViewed}  previous={idx && messages[idx - 1]} />
                         ))}
                     </MessagesWrapper>
+                    {selectedContact.isTyping && <IsTypingText>Is typing...</IsTypingText>}
                 </Grid>
                 <Grid item>
                  <Grid container alignItems="center" spacing={1}>
@@ -219,4 +240,5 @@ const mapStateTopProps = ({selectedContact, currentUser}) =>  ({
         currentUser
     });
 
-export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage, messageWasViewed: setMessageWasViewed })(ChatBox);
+export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage,
+     messageWasViewed: setMessageWasViewed, isTyping: setIsTyping  })(ChatBox);

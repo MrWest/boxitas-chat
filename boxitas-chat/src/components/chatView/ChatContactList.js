@@ -4,7 +4,7 @@ import Pusher from 'pusher-js';
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { getContacts, selectContact, notify } from "../../actions";
+import { getContacts, selectContact, notify, setIsLoading } from "../../actions";
 import { ImgStandard } from "../globals";
 import { ContactSmallFrame } from "./common";
 import { respondTo } from "../../helpers/respondTo";
@@ -130,7 +130,7 @@ const ContactItem =({ contact, onSelectContact, selected }) => {
     );
 }
 
-const ChatContactList = ({contacts, currentUser, selectedContact, doSelectContact, doGetContacts, doNotify}) => {
+const ChatContactList = ({contacts, currentUser, selectedContact, doSelectContact, doGetContacts, doNotify, isLoading}) => {
     const [search, setSearch] = useState('');
     // when the component is mounted creates the Pusher object and subscribe to the channels
     // chat channel  binded  to 'user' to watch for new contacts
@@ -171,7 +171,11 @@ return (
                     <ContactsWrapper>
                         {contacts.map(contact => contact.name?.toLowerCase()
                         .includes(search.toLowerCase()) && <ContactItem key={contact.name} contact={contact}
-                            onSelectContact={() => doSelectContact(contact, currentUser)} selected={contact.id === selectedContact.id}/>
+                            onSelectContact={() => {
+                                 isLoading(false);
+                                 doSelectContact(contact, currentUser);
+                                 isLoading(true);
+                                }} selected={contact.id === selectedContact.id}/>
                         )}
                     </ContactsWrapper>
                 </Grid>
@@ -188,4 +192,4 @@ const mapStateTopProps = ({contacts, selectedContact, currentUser}) =>  ({
     });
 
 export default connect(mapStateTopProps, { doSelectContact: selectContact,
-     doGetContacts: getContacts, doNotify: notify })(ChatContactList);
+     doGetContacts: getContacts, doNotify: notify, isLoading: setIsLoading })(ChatContactList);

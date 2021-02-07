@@ -1,4 +1,4 @@
-import { SELECT_CONTACT, REGISTER_MESSAGE, UPDATE_MESSAGES_STATUS, SET_IS_TYPING } from '../actions/types';
+import { SELECT_CONTACT, REGISTER_MESSAGE, UPDATE_MESSAGES_STATUS, SET_IS_TYPING, SET_IS_LOADING } from '../actions/types';
 
 const selectedContactReducer = (state = { messages: [] }, action)  => {
     switch (action.type) {
@@ -15,6 +15,8 @@ const selectedContactReducer = (state = { messages: [] }, action)  => {
                 return msj ||  {...msg, wasViewed: true }}) };
         case SET_IS_TYPING:
                 return {...state, isTyping: action.payload};
+        case SET_IS_LOADING:
+                  return {...state, isLoading: action.payload};
         default:
           return state;
       }

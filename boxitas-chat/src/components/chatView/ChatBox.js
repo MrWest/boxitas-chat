@@ -5,8 +5,9 @@ import _ from 'lodash';
 import Pusher from 'pusher-js';
 import moment from 'moment';
 import styled from "styled-components";
+import { keyframes } from 'styled-components'
 import { useEffect, useState } from "react";
-import { registersSelectedContactMessage, setMessageWasViewed, setIsTyping } from "../../actions/contactActions";
+import { registersSelectedContactMessage, setMessageWasViewed, setIsTyping, setIsLoading } from "../../actions/contactActions";
 import { ContactSmallFrame } from "./common";
 import { ImgStandard } from "../globals";
 import jsonServer from "../../apis/jsonServer";
@@ -97,6 +98,38 @@ const ChatBoxShell = styled.div`
         padding-left: 16px;
         `}
 `;
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const Loader = styled.div`
+    border: 12px solid #f3f3f3; /* Light grey */
+    border-top: 12px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: ${spin} 2s linear infinite;
+    position: absolute;
+    z-index: 999
+
+`;
+
+const LoaderContainer = styled.div`
+    width: 32px;
+    position: relative;
+
+`;
+
+const LoaderSection = styled(Grid)`
+    background: rgba(255,255,255, 0.3);
+    padding-right: 56px;
+`;
+
 
 const timeDiff = (date1, date2) => Math.abs(date2.getTime() - date1.getTime());
 
@@ -146,7 +179,7 @@ const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
     post(`events`, { who: currentUser.id, to: selectedContact.id });
 }, 1000);
 
-const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed, isTyping }) => {
+const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasViewed, isTyping, isLoading }) => {
     const [outgoingText, setOutgoingText] = useState();
     const [elRef, setElRef] = useState();
 
@@ -160,7 +193,10 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
           channel.bind('message', data => {
             if(((selectedContact.id === data.sender) && (currentUser.id === data.receiver)) ||
             ((currentUser.id === data.sender) && (selectedContact.id === data.receiver)) ) 
-            registerMessage(data);
+            {
+                registerMessage(data);
+                isLoading(false);
+            } 
           });
 
           channel.bind('isTyping', data => {
@@ -189,6 +225,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
     const sendMessage = () => {
         
         setOutgoingText('');
+        isLoading(true);
         const payload = {
             id: Date.now(),
             created: Date.now(),
@@ -219,6 +256,13 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                  <ChatListTitle>Message history {name && `with ${name}`}</ChatListTitle>
                 </Grid>
                 <Grid item xs>
+                    {selectedContact.name  && selectedContact.isLoading  && 
+                    <LoaderSection container justify="center">
+                        <LoaderContainer>
+                            <Loader />
+                        </LoaderContainer>
+                    </LoaderSection>
+                    }
                     <MessagesWrapper ref={setElRef}>
                         {selectedContact.id && messages?.map((message, idx) => (
                         <ChatMessages key={message.id} message={message} 
@@ -264,4 +308,4 @@ const mapStateTopProps = ({selectedContact, currentUser}) =>  ({
     });
 
 export default connect(mapStateTopProps, { registerMessage: registersSelectedContactMessage,
-     messageWasViewed: setMessageWasViewed, isTyping: setIsTyping  })(ChatBox);
+     messageWasViewed: setMessageWasViewed, isTyping: setIsTyping, isLoading: setIsLoading  })(ChatBox);

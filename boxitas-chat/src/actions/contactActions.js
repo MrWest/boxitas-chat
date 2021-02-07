@@ -1,7 +1,7 @@
 import jsonServer from "../apis/jsonServer";
 import { errorAndLog, okAndLog } from "../helpers/utils";
 import {  SELECT_CONTACT, REGISTER_MESSAGE, CONTACT_LOGIN,
-   SUBSCRIBED_CONTACTS, CONTACT_LOGOUT, NOTIFY_MESSAGES, UPDATE_MESSAGES_STATUS, SET_IS_TYPING } from "./types";
+   SUBSCRIBED_CONTACTS, CONTACT_LOGOUT, NOTIFY_MESSAGES, UPDATE_MESSAGES_STATUS, SET_IS_TYPING, SET_IS_LOADING } from "./types";
 
 export const selectContact = (contact, myself) => async dispatch => {
   console.log('selectContact Action - Entering');
@@ -157,6 +157,21 @@ export const contactLogin = contact => async dispatch => {
      
     } catch (e) {
       return errorAndLog('setIsTyping', e.status, e.data);
+    }
+  };
+
+  export const setIsLoading = value =>  dispatch => {
+    console.log('setIsLoading Action - Entering');
+      try {
+        dispatch({
+          type: SET_IS_LOADING,
+          payload: value
+        });
+        
+        return okAndLog('setIsLoading', 200, value);
+     
+    } catch (e) {
+      return errorAndLog('setIsLoading', e.status, e.data);
     }
   };
   

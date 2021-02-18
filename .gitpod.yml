@@ -1,6 +1,6 @@
 tasks:
   - init: cd boxitas-chat
-    command: npm install
+    command: yarn install
 
 ports:
   - port: 3000

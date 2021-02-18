@@ -1,5 +1,5 @@
 tasks:
-  - init: npm install
+  - init: yarn install
     command: npm start
 
 ports:

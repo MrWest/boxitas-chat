@@ -14,7 +14,7 @@ const store  = createStore(reducers, soloInitialState, applyMiddleware(thunk));
 
 
 
-test('Selected contact name is displayed on chat history', () => {
+test('All contacts are displayed on chat contact list', () => {
     render( 
       <Provider store={store}>
           <ChatContactList />
@@ -22,44 +22,33 @@ test('Selected contact name is displayed on chat history', () => {
     );
   
 
-    // expecting the name of the selected contact to be displayed
-    expect(screen.getByText(`Message history with ${soloInitialState.selectedContact.name}`)).toBeDefined();
+    // expecting the name of all contacts to be displayed
+    soloInitialState.contacts.forEach(
+      contact =>  expect(screen.getByText(contact.name)).toBeDefined());
 
     
   });
 
-test('Send button enabled on text written', () => {
+test('Search input filters contacts', () => {
   render( 
     <Provider store={store}>
         <ChatContactList />
     </Provider>
   );
 
-  // expecting Send button to be disabled at first
-  expect(screen.getByTestId(/chat-button/i)).toBeDisabled();
+   // expecting the name of all contacts to be displayed
+   soloInitialState.contacts.forEach(
+    contact =>  expect(screen.getByText(contact.name)).toBeDefined());
 
-  // writting Hi on the chat
-  fireEvent.change(screen.getByPlaceholderText(/Aa/i),  { target: { value: 'Hi' } })
 
-  // expecting Send button to be enabled after writting
-  expect(screen.getByTestId(/chat-button/i)).toBeEnabled();
-});
+  // writting an unmatching text on the search input
+  fireEvent.change(screen.getByTestId(/search-input/i),  { target: { value: 'k' } })
 
-test('Chat textarea text cleared on Send Button click', () => {
-    render( 
-      <Provider store={store}>
-          <ChatContactList />
-      </Provider>
-    );
-  
-    // writting Hi on the chat
-    fireEvent.change(screen.getByPlaceholderText(/Aa/i),  { target: { value: 'Hi there' } });
-
-     // hitting Send button
-    fireEvent.click(screen.getByTestId(/chat-button/i));
-
-    // expecting Send button to be enabled after writting
-    expect(screen.getByPlaceholderText(/Aa/i)).toHaveDisplayValue('');
-
-    
+  // expecting the name of all contacts to be displayed
+  soloInitialState.contacts.forEach(
+  contact =>  {
+    const element = screen.queryByText(contact.name);
+    expect(element).not.toBeInTheDocument();
   });
+
+});

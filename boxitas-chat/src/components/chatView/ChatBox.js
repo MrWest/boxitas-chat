@@ -41,8 +41,8 @@ const ChatMessages =({ message, isSent, onShown, previous }) => {
                 }
                 <Grid item style={{ maxWidth: '70%' }}>
                     <MessageBulb isSent={isSent}>
-                        <Message>{message.message}</Message>
-                        {isSent&&message.wasViewed && <CheckIcon />}
+                        <Message  data-testid="chat-message">{message.message}</Message>
+                        {isSent&&message.wasViewed && <CheckIcon  data-testid="check-icon"/>}
                     </MessageBulb>
                 </Grid>
             </Grid>
@@ -168,12 +168,13 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                                 multiline
                                 rows={3}
                                 disabled={!selectedContact.id}
+                                placeholder="Aa"
                                 rowsMax={3} />
                          </ChatSendInputtContainer>
                      </Grid>
                      <Grid item>
                          {/* disabled on no text for sending */}
-                         <SendButton variant="contained" color="primary" disabled={!outgoingText} onClick={sendMessage}>
+                         <SendButton data-testid="chat-button" variant="contained" color="primary" disabled={!outgoingText} onClick={sendMessage}>
                              Send
                          </SendButton>
                      </Grid>

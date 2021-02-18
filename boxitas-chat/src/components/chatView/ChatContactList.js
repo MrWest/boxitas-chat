@@ -67,7 +67,7 @@ return (
                         </CustomGrid>
                         <Grid item xs>
                             <SearchInputContainer>
-                                <ChatSearchInput onChange={onTextChanged}/>
+                                <ChatSearchInput data-testid="search-input" onChange={onTextChanged}/>
                             </SearchInputContainer>
                         </Grid>
                     </Grid>

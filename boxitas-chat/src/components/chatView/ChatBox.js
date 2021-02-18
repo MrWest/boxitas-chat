@@ -5,10 +5,9 @@ import Pusher from 'pusher-js';
 import moment from 'moment';
 import { useEffect, useState } from "react";
 import { registersSelectedContactMessage, setMessageWasViewed, setIsTyping, setIsLoading } from "../../actions/contactActions";
-import { ContactSmallFrame } from "./common";
 import { ImgStandard } from "../globals";
 import jsonServer from "../../apis/jsonServer";
-import { ChatBoxShell, ChatListTitle, ChatSendInput, ChatSendInputtContainer, CheckIcon, IsTypingText, Loader, LoaderContainer, LoaderSection, MessageBulb, MessagesWrapper, SendButton, SpacingFrame, TimeText } from "./chatCommon";
+import { ChatBoxShell, ContactSmallFrame, ChatListTitle, ChatSendInput, ChatSendInputtContainer, CheckIcon, IsTypingText, Loader, LoaderContainer, LoaderSection, MessageBulb, MessagesWrapper, SendButton, SpacingFrame, TimeText } from "./chatCommon";
 import { Message } from "@material-ui/icons";
 
 

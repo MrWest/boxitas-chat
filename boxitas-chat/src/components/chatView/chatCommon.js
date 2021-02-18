@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from "@material-ui/core";
-import { Check } from "@material-ui/icons";
+import { Check, MessageRounded } from "@material-ui/icons";
 import styled, { keyframes } from "styled-components";
 import { respondTo } from "../../helpers/respondTo";
 
@@ -120,6 +120,113 @@ const LoaderSection = styled(Grid)`
     padding-right: 56px;
 `;
 
+const ChatContactsTitle = styled.p`
+    font-size: 18px;
+    margin: 0px;
+    ${respondTo.sm`
+     display: none;
+  `}
+`;
+const ChatSearchInput = styled.input`
+    height: 32px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 0px 24px;
+    padding-bottom: 2px;
+    border: 1px solid #d4d9e2;
+    outline: none;
+    position: relative;
+    ${respondTo.sm`
+        height: 24px;
+        padding: 0px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+  `}
+`;
+const SearchInputContainer = styled.div`
+    display: flex;
+`;
+const ContactItemShell = styled.div`
+    border-bottom: 1px solid ${props => props.selected ? '#3f51b5' : '#d4d9e2' };
+    padding: 8px 0px;
+    color: ${props => props.selected ? '#3f51b5' : 'inherit' };
+    cursor: pointer;
+    &:hover {
+        background: transparent;
+        color: #3577d4;
+        cursor: pointer;
+        border-bottom: 1px solid #3577d4;
+      }
+`;
+
+const ContactName = styled.p`
+    font-size: 16;
+    margin: 0px;
+    ${respondTo.sm`
+    font-size: 12px;
+ `}
+`;
+const OnlineDot = styled.div`
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
+    background: ${props => props.isOnline && props.isOnline !== 'false' ? '#31a24c' : '#828282' };
+    ${respondTo.sm`
+    height: 8px;
+    width: 8px;
+    border-radius: 4px;
+    `}
+`;
+const NewMessage = styled(MessageRounded)`
+    background: #31a24c;
+    color: white;
+    padding: 3px;
+    border-radius: 8px;
+    height: 10px !important;
+    width: 10px !important;
+    position: absolute;
+    top: -6px;
+    right: -12px;
+`
+
+const CustomGrid = styled(Grid)`
+    ${respondTo.sm`
+    padding: 0px !important;
+    `}
+`;
+
+const GridOnMobile = styled(Grid)`
+    display: none;
+    ${respondTo.sm`
+    display: block;
+    `}
+`;
+
+const GridNotMobile = styled(Grid)`
+    ${respondTo.sm`
+    display: none;
+    `}
+`;
+
+const ContactsWrapper = styled.div`
+    height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+`;
+
+const ContactSmallFrame = styled.div`
+    height: 28px;
+    width: 28px;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    ${respondTo.sm`
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    `}
+`;
+
 export { 
     Loader,
     LoaderSection,
@@ -136,6 +243,17 @@ export {
     SendButton,
     TimeText,
     IsTypingText,
-    SpacingFrame
-
+    SpacingFrame,
+    ChatContactsTitle,
+    ContactsWrapper,
+    GridNotMobile,
+    GridOnMobile,
+    CustomGrid,
+    NewMessage,
+    OnlineDot,
+    ContactName,
+    ContactItemShell,
+    SearchInputContainer,
+    ChatSearchInput,
+    ContactSmallFrame
 }

@@ -1,107 +1,12 @@
 import { Grid } from "@material-ui/core";
-import { MessageRounded } from "@material-ui/icons";
 import Pusher from 'pusher-js';
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
 import { getContacts, selectContact, notify, setIsLoading } from "../../actions";
 import { ImgStandard } from "../globals";
-import { ContactSmallFrame } from "./common";
-import { respondTo } from "../../helpers/respondTo";
+import { ChatContactsTitle, ContactSmallFrame, ChatSearchInput, ContactItemShell, ContactName, ContactsWrapper, CustomGrid, GridNotMobile, GridOnMobile, NewMessage, OnlineDot, SearchInputContainer } from "./chatCommon";
 
-const ChatListTitle = styled.p`
-    font-size: 18px;
-    margin: 0px;
-    ${respondTo.sm`
-     display: none;
-  `}
-`;
-const ChatSearchInput = styled.input`
-    height: 32px;
-    width: 100%;
-    border-radius: 16px;
-    padding: 0px 24px;
-    padding-bottom: 2px;
-    border: 1px solid #d4d9e2;
-    outline: none;
-    position: relative;
-    ${respondTo.sm`
-        height: 24px;
-        padding: 0px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-  `}
-`;
-const SearchInputContainer = styled.div`
-    display: flex;
-`;
-const ContactItemShell = styled.div`
-    border-bottom: 1px solid ${props => props.selected ? '#3f51b5' : '#d4d9e2' };
-    padding: 8px 0px;
-    color: ${props => props.selected ? '#3f51b5' : 'inherit' };
-    cursor: pointer;
-    &:hover {
-        background: transparent;
-        color: #3577d4;
-        cursor: pointer;
-        border-bottom: 1px solid #3577d4;
-      }
-`;
 
-const ContactName = styled.p`
-    font-size: 16;
-    margin: 0px;
-    ${respondTo.sm`
-    font-size: 12px;
- `}
-`;
-const OnlineDot = styled.div`
-    height: 16px;
-    width: 16px;
-    border-radius: 8px;
-    background: ${props => props.isOnline && props.isOnline !== 'false' ? '#31a24c' : '#828282' };
-    ${respondTo.sm`
-    height: 8px;
-    width: 8px;
-    border-radius: 4px;
-    `}
-`;
-const NewMessage = styled(MessageRounded)`
-    background: #31a24c;
-    color: white;
-    padding: 3px;
-    border-radius: 8px;
-    height: 10px !important;
-    width: 10px !important;
-    position: absolute;
-    top: -6px;
-    right: -12px;
-`
-
-const CustomGrid = styled(Grid)`
-    ${respondTo.sm`
-    padding: 0px !important;
-    `}
-`;
-
-const GridOnMobile = styled(Grid)`
-    display: none;
-    ${respondTo.sm`
-    display: block;
-    `}
-`;
-
-const GridNotMobile = styled(Grid)`
-    ${respondTo.sm`
-    display: none;
-    `}
-`;
-
-const ContactsWrapper = styled.div`
-    height: 50vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-`;
 
 const ContactItem =({ contact, onSelectContact, selected }) => {
 
@@ -158,7 +63,7 @@ return (
                 <Grid item>
                     <Grid container alignItems="center" spacing={2} style={{ paddingBottom: 8 }}>
                         <CustomGrid item >
-                            <ChatListTitle>Contact List</ChatListTitle>
+                            <ChatContactsTitle>Contact List</ChatContactsTitle>
                         </CustomGrid>
                         <Grid item xs>
                             <SearchInputContainer>

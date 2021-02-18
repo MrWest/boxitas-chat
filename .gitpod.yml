@@ -1,6 +1,6 @@
 tasks:
   - init: cd boxitas-chat
-    command: npm install & npm start
+    command: npm install
 
 ports:
   - port: 3000

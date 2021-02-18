@@ -163,7 +163,7 @@ const ChatBox = ({ selectedContact, currentUser, registerMessage, messageWasView
                      <Grid item xs>
                          {/* disabled on no selected contact */}
                          <ChatSendInputtContainer>
-                             <ChatSendInput value={outgoingText} onChange={onTextChanged} onKeyUp={onKeyDown}
+                             <ChatSendInput data-testid="chat-textarea" value={outgoingText} onChange={onTextChanged} onKeyUp={onKeyDown}
                                 variant="outlined"
                                 multiline
                                 rows={3}

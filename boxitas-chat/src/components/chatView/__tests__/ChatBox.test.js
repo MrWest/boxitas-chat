@@ -21,7 +21,6 @@ test('Selected contact name is displayed on chat history', () => {
       </Provider>
     );
   
-
     // expecting the name of the selected contact to be displayed
     expect(screen.getByText(`Message history with ${soloInitialState.selectedContact.name}`)).toBeDefined();
 

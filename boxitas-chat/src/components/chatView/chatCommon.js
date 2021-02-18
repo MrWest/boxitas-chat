@@ -105,7 +105,8 @@ const Loader = styled.div`
     height: 32px;
     animation: ${spin} 2s linear infinite;
     position: absolute;
-    z-index: 999
+    z-index: 999;
+    opacity: 0.5;
 
 `;
 

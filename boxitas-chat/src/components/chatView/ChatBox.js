@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { registersSelectedContactMessage, setMessageWasViewed, setIsTyping, setIsLoading } from "../../actions/contactActions";
 import { ImgStandard } from "../globals";
 import jsonServer from "../../apis/jsonServer";
-import { ChatBoxShell, ContactSmallFrame, ChatListTitle, ChatSendInput, ChatSendInputtContainer, CheckIcon, IsTypingText, Loader, LoaderContainer, LoaderSection, MessageBulb, MessagesWrapper, SendButton, SpacingFrame, TimeText } from "./chatCommon";
-import { Message } from "@material-ui/icons";
+import { ChatBoxShell, ContactSmallFrame, ChatListTitle, ChatSendInput, ChatSendInputtContainer, CheckIcon,
+     IsTypingText, Loader, LoaderContainer, LoaderSection, MessageBulb, MessagesWrapper, SendButton, SpacingFrame, TimeText, Message } from "./chatCommon";
+
 
 
 

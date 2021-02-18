@@ -42,7 +42,7 @@ test('Search input filters contacts', () => {
 
 
   // writting an unmatching text on the search input
-  fireEvent.change(screen.getByTestId(/search-input/i),  { target: { value: 'k' } })
+  fireEvent.change(screen.getByTestId(/search-input/i),  { target: { value: 'e343105e21bb9b98e53f' } })
 
   // expecting the name of all contacts to be displayed
   soloInitialState.contacts.forEach(

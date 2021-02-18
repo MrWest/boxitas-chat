@@ -75,7 +75,7 @@ return (
                 <Grid item xs>
                     <ContactsWrapper>
                         {contacts.map(contact => contact.name?.toLowerCase()
-                        .includes(search.toLowerCase()) && <ContactItem key={contact.name} contact={contact}
+                        .includes(contact.name.toLowerCase()) && <ContactItem key={contact.name} contact={contact}
                             onSelectContact={() => {
                                  isLoading(false);
                                  doSelectContact(contact, currentUser);
